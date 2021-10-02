@@ -14,11 +14,9 @@ import {ManualInput} from './shapes';
 
 const SignInButton = () => {
   return (
-    <View style={styles.button}>
-      <Button mode="contained" onPress={() => console.log('Sign In: Pressed')}>
-        <Text style={styles.buttonText}>{'SIGN IN'}</Text>
-      </Button>
-    </View>
+    <Button mode="contained" onPress={() => console.log('Sign In: Pressed')}>
+      <Text style={styles.buttonText}>{'SIGN IN'}</Text>
+    </Button>
   );
 };
 
@@ -68,7 +66,7 @@ const EmailInput = ({title}): Node => {
 const UbademyLogo = ({size}) => {
   return (
     <Image
-      style={[styles.ubademyLogo, {width: size, height: size}]}
+      style={{width: size, height: size}}
       source={require('./android/app/src/main/res/images/adaptive-icon.png')}
     />
   );
@@ -77,78 +75,87 @@ const UbademyLogo = ({size}) => {
 const App: () => Node = () => {
   return (
     <View style={styles.root}>
-      <ManualInput
-        color={'#a8dafa'}
-        triangleHeight={Dimensions.get('window').height * (1 / 9)}
-        trapezoidHeight={Dimensions.get('window').height * (2 / 9)}
-      />
-      <UbademyLogo size={Dimensions.get('window').height * (1 / 3)} />
-      <View style={styles.panel}>
-        <Text style={styles.bigText}>{'Welcome back!'}</Text>
-        <Text style={styles.smallText}>{'Sign into your account'}</Text>
-        <EmailInput title={'Email'} />
-        <PasswordInput title={'Password'} />
-        <SignInButton />
+      <View style={styles.manulaInputStile}>
+        <ManualInput
+          color={'#A8DAFA'}
+          triangleHeight={Dimensions.get('window').height * (1 / 9)}
+          trapezoidHeight={Dimensions.get('window').height * (2 / 9)}
+        />
       </View>
-      <View behavior="height" style={styles.signUpBar}>
-        <Text>
-          <Text style={styles.smallText}>{"Don't have an account? "}</Text>
-          <Text
-            onPress={() => console.log('Sign Up: Pressed')}
-            style={styles.singUpText}>
-            {'Sign Up'}
+      <View style={styles.top}>
+        <UbademyLogo size={'75%'} />
+      </View>
+      <View style={styles.middle}>
+        <View style={styles.spacing}>
+          <Text style={styles.titleTextStyle}>{'Welcome back!'}</Text>
+          <Text style={styles.subtitleTextStyle}>
+            {'Sign into your account'}
           </Text>
-        </Text>
+        </View>
+        <View style={styles.spacing}>
+          <EmailInput title={'Email'} />
+        </View>
+        <View style={styles.spacing}>
+          <PasswordInput title={'Password'} />
+        </View>
+        <View style={styles.spacing}>
+          <SignInButton />
+        </View>
       </View>
+      <Text style={styles.bottom}>
+        <Text style={styles.subtitleTextStyle}>
+          {"Don't have an account? "}
+        </Text>
+        <Text
+          onPress={() => console.log('Sign Up: Pressed')}
+          style={styles.singUpText}>
+          {'Sign Up'}
+        </Text>
+      </Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  buttonText: {
-    textAlign: 'center',
-    color: '#1d3557',
-  },
-  signUpBar: {
-    position: 'absolute',
-    top: '90%',
-  },
-  ubademyLogo: {
-    flex: 1,
-    position: 'absolute',
-  },
   root: {
     flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'center',
+    padding: '5%',
     backgroundColor: '#1d3557',
   },
-  panel: {
+  top: {
+    flex: 3,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  middle: {
+    flex: 6,
+  },
+  bottom: {
     flex: 1,
-    width: Dimensions.get('window').width * 0.9,
-    top: Dimensions.get('window').height * (1 / 3),
-    position: 'absolute',
-  },
-  textInput: {
-    marginTop: '2%',
-  },
-  button: {
-    marginTop: '2%',
-  },
-  bigText: {
     textAlign: 'center',
-    color: '#A8DAFA',
-    fontSize: 36,
   },
-  smallText: {
-    textAlign: 'center',
+  titleTextStyle: {
+    fontSize: 30,
     color: '#A8DAFA',
-    fontSize: 20,
+    textAlign: 'center',
+  },
+  subtitleTextStyle: {
+    fontSize: 24,
+    color: '#A8DAFA',
+    textAlign: 'center',
+  },
+  spacing: {
+    marginTop: '2%',
+    marginBottom: '1%',
   },
   singUpText: {
+    fontSize: 24,
+    color: '#FAFAFA',
     textAlign: 'center',
-    color: '#fafafa',
-    fontSize: 20,
+  },
+  manulaInputStile: {
+    flex: 1,
+    position: 'absolute',
   },
 });
 
