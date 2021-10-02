@@ -1,45 +1,32 @@
 import * as React from 'react';
-import {Dimensions, StyleSheet, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
-const ManualInput = ({color, triangleHeight, trapezoidHeight}) => {
+const ManualInput = () => {
   return (
     <View>
-      <Trapezoid color={color} height={trapezoidHeight} />
-      <TriangleCorner color={color} height={triangleHeight} />
+      <Trapezoid />
     </View>
   );
 };
 
-const Trapezoid = ({color, height}) => {
-  return (
-    <View
-      style={[
-        styles.trapezoid,
-        {borderTopColor: color, borderTopWidth: height},
-      ]}
-    />
-  );
-};
-
-const TriangleCorner = ({color, height}) => {
-  return (
-    <View
-      style={[
-        styles.triangleCorner,
-        {borderTopColor: color, borderTopWidth: height},
-      ]}
-    />
-  );
+const Trapezoid = () => {
+  return <View style={[styles.trapezoid]} />;
 };
 
 const styles = StyleSheet.create({
   trapezoid: {
-    width: Dimensions.get('window').width,
-  },
-  triangleCorner: {
-    borderRightWidth: Dimensions.get('window').width,
+    width: '0%',
+    height: '50%',
+    borderTopWidth: 100,
+    borderTopColor: 'red',
+    borderBottomWidth: 100,
+    borderBottomColor: 'transparent',
+    borderLeftWidth: 500,
+    borderLeftColor: 'red',
+    borderRightWidth: 0,
     borderRightColor: 'transparent',
+    borderStyle: 'solid',
   },
 });
 
-export {ManualInput, Trapezoid, TriangleCorner};
+export {ManualInput, Trapezoid};

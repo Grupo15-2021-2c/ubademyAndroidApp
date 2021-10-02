@@ -8,9 +8,8 @@
 
 import React from 'react';
 import type {Node} from 'react';
-import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import {Button, DefaultTheme, TextInput} from 'react-native-paper';
-import {ManualInput} from './shapes';
 
 const SignInButton = () => {
   return (
@@ -26,24 +25,22 @@ const PasswordInput = ({title}): Node => {
   const [password, setPassword] = React.useState(true);
 
   return (
-    <View style={styles.textInput}>
-      <TextInput
-        label={title}
-        value={text}
-        secureTextEntry={password}
-        left={
-          <TextInput.Icon
-            name={icon}
-            onPress={() => {
-              setIcon(icon === 'eye' ? 'eye-off' : 'eye');
-              setPassword(!password);
-            }}
-          />
-        }
-        theme={textInputTheme}
-        onChangeText={textInput => setText(textInput)}
-      />
-    </View>
+    <TextInput
+      label={title}
+      value={text}
+      secureTextEntry={password}
+      left={
+        <TextInput.Icon
+          name={icon}
+          onPress={() => {
+            setIcon(icon === 'eye' ? 'eye-off' : 'eye');
+            setPassword(!password);
+          }}
+        />
+      }
+      theme={textInputTheme}
+      onChangeText={textInput => setText(textInput)}
+    />
   );
 };
 
@@ -51,23 +48,30 @@ const EmailInput = ({title}): Node => {
   const [text, setText] = React.useState('');
 
   return (
-    <View style={styles.textInput}>
-      <TextInput
-        label={title}
-        value={text}
-        left={<TextInput.Icon name="email" />}
-        theme={textInputTheme}
-        onChangeText={textInput => setText(textInput)}
-      />
-    </View>
+    <TextInput
+      label={title}
+      value={text}
+      left={<TextInput.Icon name="email" />}
+      theme={textInputTheme}
+      onChangeText={textInput => setText(textInput)}
+    />
   );
 };
 
-const UbademyLogo = ({size}) => {
+const UbademyLogo = () => {
   return (
     <Image
-      style={{width: size, height: size}}
+      style={styles.logoStyle}
       source={require('./android/app/src/main/res/images/adaptive-icon.png')}
+    />
+  );
+};
+
+const BackgroundDetail = () => {
+  return (
+    <Image
+      style={styles.backgroundDetailImageStyle}
+      source={require('./android/app/src/main/res/images/background-detail.png')}
     />
   );
 };
@@ -75,30 +79,24 @@ const UbademyLogo = ({size}) => {
 const App: () => Node = () => {
   return (
     <View style={styles.root}>
-      <View style={styles.manulaInputStile}>
-        <ManualInput
-          color={'#A8DAFA'}
-          triangleHeight={Dimensions.get('window').height * (1 / 9)}
-          trapezoidHeight={Dimensions.get('window').height * (2 / 9)}
-        />
+      <View style={styles.backgroundDetail}>
+        <BackgroundDetail />
       </View>
       <View style={styles.top}>
         <UbademyLogo size={'75%'} />
       </View>
-      <View style={styles.middle}>
-        <View style={styles.spacing}>
-          <Text style={styles.titleTextStyle}>{'Welcome back!'}</Text>
-          <Text style={styles.subtitleTextStyle}>
-            {'Sign into your account'}
-          </Text>
-        </View>
-        <View style={styles.spacing}>
+      <View style={styles.headerStyle}>
+        <Text style={styles.titleTextStyle}>{'Welcome back!'}</Text>
+        <Text style={styles.subtitleTextStyle}>{'Sign into your account'}</Text>
+      </View>
+      <View style={styles.formStyle}>
+        <View style={styles.margin}>
           <EmailInput title={'Email'} />
         </View>
-        <View style={styles.spacing}>
+        <View style={styles.margin}>
           <PasswordInput title={'Password'} />
         </View>
-        <View style={styles.spacing}>
+        <View style={styles.margin}>
           <SignInButton />
         </View>
       </View>
@@ -119,7 +117,6 @@ const App: () => Node = () => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    padding: '5%',
     backgroundColor: '#1d3557',
   },
   top: {
@@ -127,12 +124,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  middle: {
-    flex: 6,
-  },
   bottom: {
     flex: 1,
     textAlign: 'center',
+  },
+  logoStyle: {
+    resizeMode: 'contain',
+    height: '100%',
   },
   titleTextStyle: {
     fontSize: 30,
@@ -144,18 +142,33 @@ const styles = StyleSheet.create({
     color: '#A8DAFA',
     textAlign: 'center',
   },
-  spacing: {
-    marginTop: '2%',
-    marginBottom: '1%',
+  backgroundDetailImageStyle: {
+    resizeMode: 'stretch',
+    width: '100%',
+    height: '100%',
   },
   singUpText: {
     fontSize: 24,
     color: '#FAFAFA',
     textAlign: 'center',
   },
-  manulaInputStile: {
-    flex: 1,
+  backgroundDetail: {
+    height: '33%',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
     position: 'absolute',
+  },
+  headerStyle: {
+    flex: 1,
+  },
+  margin: {
+    marginTop: '2%',
+  },
+  formStyle: {
+    flex: 5,
+    padding: '2%',
+    justifyContent: 'flex-start',
   },
 });
 
