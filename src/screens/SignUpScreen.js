@@ -41,8 +41,10 @@ const SignUp = ({navigation}) => {
         <BackgroundDetail />
       </View>
       <View style={styles.headerStyle}>
-        <Text style={styles.titleTextStyle}>{'Welcome back!'}</Text>
-        <Text style={styles.subtitleTextStyle}>{'Sign into your account'}</Text>
+        <Text style={styles.titleTextStyle}>{'Join Ubademy'}</Text>
+        <Text style={styles.subtitleTextStyle}>
+          {'Sign up and begin to study'}
+        </Text>
       </View>
       <View style={styles.formStyle}>
         <View style={styles.margin}>
