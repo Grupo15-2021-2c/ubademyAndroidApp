@@ -11,9 +11,11 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-paper';
 import {EmailInput, PasswordInput} from '../components/TextInputComponents';
 
-const SignInButton = () => {
+const SignInButton = ({email, password}) => {
   return (
-    <Button mode="contained" onPress={() => console.log('Sign In: Pressed')}>
+    <Button
+      mode="contained"
+      onPress={() => console.log('email: ' + email + ' password: ' + password)}>
       <Text style={styles.buttonText}>{'SIGN IN'}</Text>
     </Button>
   );
@@ -38,6 +40,9 @@ const BackgroundDetail = () => {
 };
 
 const SignIn = ({navigation}) => {
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
   return (
     <View style={styles.root}>
       <View style={styles.backgroundDetail}>
@@ -52,13 +57,17 @@ const SignIn = ({navigation}) => {
       </View>
       <View style={styles.formStyle}>
         <View style={styles.margin}>
-          <EmailInput title={'Email'} />
+          <EmailInput title={'Email'} text={email} setText={setEmail} />
         </View>
         <View style={styles.margin}>
-          <PasswordInput title={'Password'} />
+          <PasswordInput
+            title={'Password'}
+            text={password}
+            setText={setPassword}
+          />
         </View>
         <View style={styles.margin}>
-          <SignInButton />
+          <SignInButton password={password} email={email} />
         </View>
       </View>
       <Text style={styles.bottom}>

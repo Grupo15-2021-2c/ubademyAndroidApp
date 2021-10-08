@@ -24,17 +24,32 @@ const BackgroundDetail = () => {
   );
 };
 
-const SignUpButton = () => {
+const SignUpButton = ({firstName, lastName, email, password}) => {
   return (
     <Button
       mode="contained"
-      onPress={() => console.log('Create account: Pressed')}>
+      onPress={() =>
+        console.log(
+          'firstName: ' +
+            firstName +
+            ' lastName: ' +
+            lastName +
+            ' email: ' +
+            email +
+            ' password: ' +
+            password,
+        )
+      }>
       <Text style={styles.buttonText}>{'CREATE ACCOUNT'}</Text>
     </Button>
   );
 };
 
 const SignUp = ({navigation}) => {
+  const [firstName, setFirstName] = React.useState('');
+  const [lastName, setLastName] = React.useState('');
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
   return (
     <View style={styles.root}>
       <View style={styles.backgroundDetail}>
@@ -48,19 +63,36 @@ const SignUp = ({navigation}) => {
       </View>
       <View style={styles.formStyle}>
         <View style={styles.margin}>
-          <NameInput title={'First name'} />
+          <NameInput
+            title={'First name'}
+            text={firstName}
+            setText={setFirstName}
+          />
         </View>
         <View style={styles.margin}>
-          <NameInput title={'Last name'} />
+          <NameInput
+            title={'Last name'}
+            text={lastName}
+            setText={setLastName}
+          />
         </View>
         <View style={styles.margin}>
-          <EmailInput title={'Email'} />
+          <EmailInput title={'Email'} text={email} setText={setEmail} />
         </View>
         <View style={styles.margin}>
-          <PasswordInput title={'Password'} />
+          <PasswordInput
+            title={'Password'}
+            text={password}
+            setText={setPassword}
+          />
         </View>
         <View style={styles.margin}>
-          <SignUpButton />
+          <SignUpButton
+            firstName={firstName}
+            lastName={lastName}
+            email={email}
+            password={password}
+          />
         </View>
       </View>
     </View>
