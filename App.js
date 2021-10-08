@@ -13,6 +13,7 @@ import SignIn from './src/screens/SignInScreen';
 import SignUp from './src/screens/SignUpScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import Home from './src/screens/HomeScreen';
 
 const Stack = createStackNavigator();
 
@@ -32,6 +33,15 @@ const App: () => Node = () => {
         <Stack.Screen
           name="Sign Up"
           component={SignUp}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="Home"
+          component={Home}
           options={{
             presentation: 'modal',
             headerShown: false,

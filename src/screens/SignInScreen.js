@@ -11,11 +11,36 @@ import {Image, StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-paper';
 import {EmailInput, PasswordInput} from '../components/TextInputComponents';
 
-const SignInButton = ({email, password}) => {
+const postLogIn = (email, password, navigation) => {
+  const url = 'https://ubademy-g15-back-node.herokuapp.com/api/users/login';
+
+  fetch(url, {
+    method: 'post',
+    mode: 'no-cors',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      email: email,
+      password: password,
+    }),
+  })
+    .then(res => res.json())
+    .then(res => {
+      console.log(res);
+      if (res === true) {
+        navigation.navigate('Home');
+      }
+    })
+    .catch(error => console.log('ERROR: ' + error.message));
+};
+
+const SignInButton = ({email, password, navigation}) => {
   return (
     <Button
       mode="contained"
-      onPress={() => console.log('email: ' + email + ' password: ' + password)}>
+      onPress={() => postLogIn(email, password, navigation)}>
       <Text style={styles.buttonText}>{'SIGN IN'}</Text>
     </Button>
   );
@@ -67,7 +92,11 @@ const SignIn = ({navigation}) => {
           />
         </View>
         <View style={styles.margin}>
-          <SignInButton password={password} email={email} />
+          <SignInButton
+            password={password}
+            email={email}
+            navigation={navigation}
+          />
         </View>
       </View>
       <Text style={styles.bottom}>
