@@ -7,12 +7,17 @@
  */
 
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View, ToastAndroid} from 'react-native';
 import {Button} from 'react-native-paper';
 import {EmailInput, PasswordInput} from '../components/TextInputComponents';
 
-const postLogIn = (email, password, navigation) => {
-  const url = 'https://ubademy-g15-back-node.herokuapp.com/api/users/login';
+const showToast = text => {
+  ToastAndroid.show(text, ToastAndroid.SHORT);
+};
+
+const postLogIn = (email, password, navigation, setError) => {
+  const url =
+    'https://ubademy-g15-back-node-stage.herokuapp.com/api/users/login';
 
   fetch(url, {
     method: 'post',
@@ -28,19 +33,21 @@ const postLogIn = (email, password, navigation) => {
   })
     .then(res => res.json())
     .then(res => {
-      console.log(res);
       if (res === true) {
         navigation.navigate('Home');
+      } else {
+        showToast(res);
+        setError(true);
       }
     })
     .catch(error => console.log('ERROR: ' + error.message));
 };
 
-const SignInButton = ({email, password, navigation}) => {
+const SignInButton = ({email, password, navigation, setError}) => {
   return (
     <Button
       mode="contained"
-      onPress={() => postLogIn(email, password, navigation)}>
+      onPress={() => postLogIn(email, password, navigation, setError)}>
       <Text style={styles.buttonText}>{'SIGN IN'}</Text>
     </Button>
   );
@@ -67,6 +74,7 @@ const BackgroundDetail = () => {
 const SignIn = ({navigation}) => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [error, setError] = React.useState(false);
 
   return (
     <View style={styles.root}>
@@ -82,13 +90,19 @@ const SignIn = ({navigation}) => {
       </View>
       <View style={styles.formStyle}>
         <View style={styles.margin}>
-          <EmailInput title={'Email'} text={email} setText={setEmail} />
+          <EmailInput
+            title={'Email'}
+            text={email}
+            setText={setEmail}
+            error={error}
+          />
         </View>
         <View style={styles.margin}>
           <PasswordInput
             title={'Password'}
             text={password}
             setText={setPassword}
+            error={error}
           />
         </View>
         <View style={styles.margin}>
@@ -96,6 +110,7 @@ const SignIn = ({navigation}) => {
             password={password}
             email={email}
             navigation={navigation}
+            setError={setError}
           />
         </View>
       </View>

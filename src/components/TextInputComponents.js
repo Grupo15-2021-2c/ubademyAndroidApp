@@ -2,12 +2,13 @@ import React from 'react';
 import type {Node} from 'react';
 import {DefaultTheme, TextInput} from 'react-native-paper';
 
-const PasswordInput = ({title, text, setText}): Node => {
+const PasswordInput = ({title, text, setText, error}): Node => {
   const [icon, setIcon] = React.useState('eye');
   const [password, setPassword] = React.useState(true);
 
   return (
     <TextInput
+      error={error}
       label={title}
       value={text}
       secureTextEntry={password}
@@ -26,9 +27,11 @@ const PasswordInput = ({title, text, setText}): Node => {
   );
 };
 
-const EmailInput = ({title, text, setText}): Node => {
+const EmailInput = ({title, text, setText, error}): Node => {
   return (
     <TextInput
+      error={error}
+      textContentType={'emailAddress'}
       label={title}
       value={text}
       left={<TextInput.Icon name="email" />}
@@ -59,6 +62,7 @@ const textInputTheme = {
     placeholder: '#A8DAFA',
     background: 'transparent',
     disabled: '#A8DAFA',
+    error: '#e63946',
   },
 };
 

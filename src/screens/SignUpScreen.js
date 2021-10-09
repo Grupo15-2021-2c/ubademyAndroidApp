@@ -7,13 +7,65 @@
  */
 
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, ToastAndroid, View} from 'react-native';
 import {
   PasswordInput,
   EmailInput,
   NameInput,
 } from '../components/TextInputComponents';
 import {Button} from 'react-native-paper';
+
+function processResponse(response) {
+  const statusCode = response.status;
+  const data = response.json();
+  return Promise.all([statusCode, data]).then(res => ({
+    statusCode: res[0],
+    data: res[1],
+  }));
+}
+
+const showToast = text => {
+  ToastAndroid.show(text, ToastAndroid.SHORT);
+};
+
+const postRegister = (
+  firstName,
+  lastName,
+  email,
+  password,
+  navigation,
+  setError,
+) => {
+  const url =
+    'https://ubademy-g15-back-node-stage.herokuapp.com/api/users/register';
+
+  fetch(url, {
+    method: 'post',
+    mode: 'no-cors',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      password: password,
+    }),
+  })
+    .then(processResponse)
+    .then(res => {
+      const {statusCode, data} = res;
+      showToast(data);
+
+      if (statusCode === 200) {
+        navigation.navigate('Sign In');
+      } else {
+        setError(true);
+      }
+    })
+    .catch(error => console.log('ERROR: ' + error.message));
+};
 
 const BackgroundDetail = () => {
   return (
@@ -24,21 +76,19 @@ const BackgroundDetail = () => {
   );
 };
 
-const SignUpButton = ({firstName, lastName, email, password}) => {
+const SignUpButton = ({
+  firstName,
+  lastName,
+  email,
+  password,
+  navigation,
+  setError,
+}) => {
   return (
     <Button
       mode="contained"
       onPress={() =>
-        console.log(
-          'firstName: ' +
-            firstName +
-            ' lastName: ' +
-            lastName +
-            ' email: ' +
-            email +
-            ' password: ' +
-            password,
-        )
+        postRegister(firstName, lastName, email, password, navigation, setError)
       }>
       <Text style={styles.buttonText}>{'CREATE ACCOUNT'}</Text>
     </Button>
@@ -50,6 +100,8 @@ const SignUp = ({navigation}) => {
   const [lastName, setLastName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [error, setError] = React.useState(false);
+
   return (
     <View style={styles.root}>
       <View style={styles.backgroundDetail}>
@@ -77,13 +129,19 @@ const SignUp = ({navigation}) => {
           />
         </View>
         <View style={styles.margin}>
-          <EmailInput title={'Email'} text={email} setText={setEmail} />
+          <EmailInput
+            title={'Email'}
+            text={email}
+            setText={setEmail}
+            error={error}
+          />
         </View>
         <View style={styles.margin}>
           <PasswordInput
             title={'Password'}
             text={password}
             setText={setPassword}
+            error={error}
           />
         </View>
         <View style={styles.margin}>
@@ -92,6 +150,8 @@ const SignUp = ({navigation}) => {
             lastName={lastName}
             email={email}
             password={password}
+            navigation={navigation}
+            setError={setError}
           />
         </View>
       </View>
