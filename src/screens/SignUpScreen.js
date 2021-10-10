@@ -7,51 +7,29 @@
  */
 
 import React from 'react';
-import {Image, StyleSheet, Text, ToastAndroid, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import {
   PasswordInput,
   EmailInput,
-  NameInput,
+  LastName,
+  FirsName,
 } from '../components/TextInputComponents';
 import {Button} from 'react-native-paper';
+import showToast from '../components/ToastUtilities';
+import processResponse from '../components/FetchUtilities';
+import {registerEndPoint} from '../Parameters/EndpointsUrls';
 
-function processResponse(response) {
-  const statusCode = response.status;
-  const data = response.json();
-  return Promise.all([statusCode, data]).then(res => ({
-    statusCode: res[0],
-    data: res[1],
-  }));
-}
+const postRegister = (form, navigation, setError) => {
+  console.log('[INFO] form: ' + JSON.stringify(form));
 
-const showToast = text => {
-  ToastAndroid.show(text, ToastAndroid.SHORT);
-};
-
-const postRegister = (
-  firstName,
-  lastName,
-  email,
-  password,
-  navigation,
-  setError,
-) => {
-  const url =
-    'https://ubademy-g15-back-node-stage.herokuapp.com/api/users/register';
-
-  fetch(url, {
+  fetch(registerEndPoint, {
     method: 'post',
     mode: 'no-cors',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      password: password,
-    }),
+    body: JSON.stringify(form),
   })
     .then(processResponse)
     .then(res => {
@@ -64,7 +42,7 @@ const postRegister = (
         setError(true);
       }
     })
-    .catch(error => console.log('ERROR: ' + error.message));
+    .catch(error => console.log('[ERROR] ' + error.message));
 };
 
 const BackgroundDetail = () => {
@@ -76,30 +54,23 @@ const BackgroundDetail = () => {
   );
 };
 
-const SignUpButton = ({
-  firstName,
-  lastName,
-  email,
-  password,
-  navigation,
-  setError,
-}) => {
+const SignUpButton = ({form, navigation, setError}) => {
   return (
     <Button
       mode="contained"
-      onPress={() =>
-        postRegister(firstName, lastName, email, password, navigation, setError)
-      }>
+      onPress={() => postRegister(form, navigation, setError)}>
       <Text style={styles.buttonText}>{'CREATE ACCOUNT'}</Text>
     </Button>
   );
 };
 
 const SignUp = ({navigation}) => {
-  const [firstName, setFirstName] = React.useState('');
-  const [lastName, setLastName] = React.useState('');
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [form, setForm] = React.useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+  });
   const [error, setError] = React.useState(false);
 
   return (
@@ -115,41 +86,30 @@ const SignUp = ({navigation}) => {
       </View>
       <View style={styles.formStyle}>
         <View style={styles.margin}>
-          <NameInput
-            title={'First name'}
-            text={firstName}
-            setText={setFirstName}
-          />
+          <FirsName title={'First name'} form={form} setForm={setForm} />
         </View>
         <View style={styles.margin}>
-          <NameInput
-            title={'Last name'}
-            text={lastName}
-            setText={setLastName}
-          />
+          <LastName title={'Last name'} form={form} setForm={setForm} />
         </View>
         <View style={styles.margin}>
           <EmailInput
             title={'Email'}
-            text={email}
-            setText={setEmail}
+            form={form}
+            setForm={setForm}
             error={error}
           />
         </View>
         <View style={styles.margin}>
           <PasswordInput
             title={'Password'}
-            text={password}
-            setText={setPassword}
+            form={form}
+            setForm={setForm}
             error={error}
           />
         </View>
         <View style={styles.margin}>
           <SignUpButton
-            firstName={firstName}
-            lastName={lastName}
-            email={email}
-            password={password}
+            form={form}
             navigation={navigation}
             setError={setError}
           />

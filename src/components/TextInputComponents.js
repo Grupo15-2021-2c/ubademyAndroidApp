@@ -1,19 +1,22 @@
 import React from 'react';
 import type {Node} from 'react';
 import {DefaultTheme, TextInput} from 'react-native-paper';
+import {StyleSheet} from 'react-native';
 
-const PasswordInput = ({title, text, setText, error}): Node => {
+const PasswordInput = ({title, form, setForm, error}): Node => {
   const [icon, setIcon] = React.useState('eye');
   const [password, setPassword] = React.useState(true);
 
   return (
     <TextInput
+      style={styles.iconStyle}
       error={error}
       label={title}
-      value={text}
+      value={form.password}
       secureTextEntry={password}
       left={
         <TextInput.Icon
+          color={'#A8DAFA'}
           name={icon}
           onPress={() => {
             setIcon(icon === 'eye' ? 'eye-off' : 'eye');
@@ -22,36 +25,55 @@ const PasswordInput = ({title, text, setText, error}): Node => {
         />
       }
       theme={textInputTheme}
-      onChangeText={textInput => setText(textInput)}
+      onChangeText={textInput => setForm({...form, password: textInput})}
     />
   );
 };
 
-const EmailInput = ({title, text, setText, error}): Node => {
+const EmailInput = ({title, form, setForm, error}): Node => {
   return (
     <TextInput
+      style={styles.iconStyle}
       error={error}
       textContentType={'emailAddress'}
       label={title}
-      value={text}
-      left={<TextInput.Icon name="email" />}
+      value={form.email}
+      left={<TextInput.Icon name="email" color={'#A8DAFA'} />}
       theme={textInputTheme}
-      onChangeText={textInput => setText(textInput)}
+      onChangeText={textInput => setForm({...form, email: textInput})}
     />
   );
 };
 
-const NameInput = ({title, text, setText}): Node => {
+const FirsName = ({title, form, setForm}): Node => {
   return (
     <TextInput
+      style={styles.iconStyle}
       label={title}
-      value={text}
-      left={<TextInput.Icon name="account" />}
+      value={form.firstName}
+      left={<TextInput.Icon name="account" color={'#A8DAFA'} />}
       theme={textInputTheme}
-      onChangeText={textInput => setText(textInput)}
+      onChangeText={textInput => setForm({...form, firstName: textInput})}
     />
   );
 };
+
+const LastName = ({title, form, setForm}): Node => {
+  return (
+    <TextInput
+      style={styles.iconStyle}
+      label={title}
+      value={form.lastName}
+      left={<TextInput.Icon name="account" color={'#A8DAFA'} />}
+      theme={textInputTheme}
+      onChangeText={textInput => setForm({...form, lastName: textInput})}
+    />
+  );
+};
+
+const styles = StyleSheet.create({
+  iconStyle: {fontWeight: 'bold'},
+});
 
 const textInputTheme = {
   ...DefaultTheme,
@@ -66,4 +88,4 @@ const textInputTheme = {
   },
 };
 
-export {PasswordInput, EmailInput, NameInput};
+export {PasswordInput, EmailInput, FirsName, LastName};

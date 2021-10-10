@@ -7,47 +7,46 @@
  */
 
 import React from 'react';
-import {Image, StyleSheet, Text, View, ToastAndroid} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-paper';
 import {EmailInput, PasswordInput} from '../components/TextInputComponents';
+import showToast from '../components/ToastUtilities';
+import processResponse from '../components/FetchUtilities';
+import {loginEndPoint} from '../Parameters/EndpointsUrls';
 
-const showToast = text => {
-  ToastAndroid.show(text, ToastAndroid.SHORT);
-};
+const postLogIn = (form, navigation, setError) => {
+  console.log('[INFO] form: ' + form);
 
-const postLogIn = (email, password, navigation, setError) => {
-  const url =
-    'https://ubademy-g15-back-node-stage.herokuapp.com/api/users/login';
-
-  fetch(url, {
+  fetch(loginEndPoint, {
     method: 'post',
     mode: 'no-cors',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      email: email,
-      password: password,
-    }),
+    body: JSON.stringify(form),
   })
-    .then(res => res.json())
+    .then(processResponse)
     .then(res => {
-      if (res === true) {
+      const {statusCode, data} = res;
+
+      console.log('[INFO] statusCode: ' + statusCode + ' data: ' + data);
+
+      if (data === true) {
         navigation.navigate('Home');
       } else {
-        showToast(res);
+        showToast(data);
         setError(true);
       }
     })
-    .catch(error => console.log('ERROR: ' + error.message));
+    .catch(error => console.log('[ERROR] ' + error.message));
 };
 
-const SignInButton = ({email, password, navigation, setError}) => {
+const SignInButton = ({form, navigation, setError}) => {
   return (
     <Button
       mode="contained"
-      onPress={() => postLogIn(email, password, navigation, setError)}>
+      onPress={() => postLogIn(form, navigation, setError)}>
       <Text style={styles.buttonText}>{'SIGN IN'}</Text>
     </Button>
   );
@@ -72,8 +71,7 @@ const BackgroundDetail = () => {
 };
 
 const SignIn = ({navigation}) => {
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [form, setForm] = React.useState({email: '', password: ''});
   const [error, setError] = React.useState(false);
 
   return (
@@ -92,23 +90,22 @@ const SignIn = ({navigation}) => {
         <View style={styles.margin}>
           <EmailInput
             title={'Email'}
-            text={email}
-            setText={setEmail}
+            form={form}
+            setForm={setForm}
             error={error}
           />
         </View>
         <View style={styles.margin}>
           <PasswordInput
             title={'Password'}
-            text={password}
-            setText={setPassword}
+            form={form}
+            setForm={setForm}
             error={error}
           />
         </View>
         <View style={styles.margin}>
           <SignInButton
-            password={password}
-            email={email}
+            form={form}
             navigation={navigation}
             setError={setError}
           />
