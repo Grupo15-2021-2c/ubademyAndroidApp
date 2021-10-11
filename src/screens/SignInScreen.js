@@ -9,13 +9,16 @@
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-paper';
-import {EmailInput, PasswordInput} from '../components/TextInputComponents';
+import {
+  EmailInput,
+  SignInPasswordInput,
+} from '../components/TextInputComponents';
 import showToast from '../components/ToastUtilities';
 import processResponse from '../components/FetchUtilities';
 import {loginEndPoint} from '../Parameters/EndpointsUrls';
 
 const postLogIn = (form, navigation, setError) => {
-  console.log('[INFO] form: ' + form);
+  console.log('[INFO] form: ' + JSON.stringify(form));
 
   fetch(loginEndPoint, {
     method: 'post',
@@ -96,7 +99,7 @@ const SignIn = ({navigation}) => {
           />
         </View>
         <View style={styles.margin}>
-          <PasswordInput
+          <SignInPasswordInput
             title={'Password'}
             form={form}
             setForm={setForm}

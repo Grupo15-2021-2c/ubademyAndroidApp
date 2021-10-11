@@ -18,9 +18,31 @@ import {Button} from 'react-native-paper';
 import showToast from '../components/ToastUtilities';
 import processResponse from '../components/FetchUtilities';
 import {registerEndPoint} from '../Parameters/EndpointsUrls';
+import {Icon} from 'react-native-elements';
+import {passwordRegex, validateEmail} from '../Parameters/Regex';
 
 const postRegister = (form, navigation, setError) => {
   console.log('[INFO] form: ' + JSON.stringify(form));
+
+  if (
+    !RegExp(passwordRegex).test(form.password) &&
+    !validateEmail(form.email)
+  ) {
+    showToast('Entered email and password are not valid');
+    setError(true);
+    return;
+  }
+
+  if (!RegExp(passwordRegex).test(form.password)) {
+    showToast('Entered password is not valid');
+    return;
+  }
+
+  if (!validateEmail(form.email)) {
+    showToast('Entered email is not valid');
+    setError(true);
+    return;
+  }
 
   fetch(registerEndPoint, {
     method: 'post',
@@ -104,7 +126,7 @@ const SignUp = ({navigation}) => {
             title={'Password'}
             form={form}
             setForm={setForm}
-            error={error}
+            error={false}
           />
         </View>
         <View style={styles.margin}>
@@ -115,6 +137,15 @@ const SignUp = ({navigation}) => {
           />
         </View>
       </View>
+
+      <Text style={styles.bottom}>
+        <Icon name={'info'} color={'#A8DAFA'} size={20} />
+        <Text style={styles.infoText}>
+          {
+            ' Password must contain at least one upper case, one number, and one special character'
+          }
+        </Text>
+      </Text>
     </View>
   );
 };
@@ -137,7 +168,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   formStyle: {
-    flex: 2,
+    flex: 5,
     padding: '2%',
     marginTop: '5%',
   },
@@ -145,7 +176,7 @@ const styles = StyleSheet.create({
     marginTop: '2%',
   },
   headerStyle: {
-    flex: 1,
+    flex: 2,
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
@@ -159,10 +190,15 @@ const styles = StyleSheet.create({
     color: '#A8DAFA',
     textAlign: 'center',
   },
-  singUpText: {
-    fontSize: 24,
-    color: '#FAFAFA',
+  infoText: {
+    fontSize: 20,
+    color: '#A8DAFA',
     textAlign: 'center',
+  },
+  bottom: {
+    flex: 1,
+    textAlign: 'center',
+    margin: '2%',
   },
 });
 
