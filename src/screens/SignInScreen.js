@@ -33,12 +33,14 @@ const postLogIn = (form, navigation, setError) => {
     .then(res => {
       const {statusCode, data} = res;
 
-      console.log('[INFO] statusCode: ' + statusCode + ' data: ' + data);
+      console.log(
+        '[INFO] statusCode: ' + statusCode + ' data: ' + JSON.stringify(data),
+      );
 
-      if (data === true) {
+      if (data.status === 'success') {
         navigation.navigate('Home');
       } else {
-        showToast(data);
+        showToast(data.message);
         setError(true);
       }
     })

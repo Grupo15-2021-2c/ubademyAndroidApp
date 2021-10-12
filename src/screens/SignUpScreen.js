@@ -56,11 +56,12 @@ const postRegister = (form, navigation, setError) => {
     .then(processResponse)
     .then(res => {
       const {statusCode, data} = res;
-      showToast(data);
 
       if (statusCode === 200) {
+        showToast(data.data);
         navigation.navigate('Sign In');
       } else {
+        showToast(data.message);
         setError(true);
       }
     })
