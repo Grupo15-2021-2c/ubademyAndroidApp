@@ -7,22 +7,15 @@
  */
 
 import React from 'react';
-import {Image, StyleSheet, View} from 'react-native';
-
-const Sheesh = () => {
-  return (
-    <Image
-      style={styles.logoStyle}
-      source={require('../resources/images/sheesh.jpg')}
-    />
-  );
-};
+import {StyleSheet, Text, View} from 'react-native';
+import {Icon} from 'react-native-elements';
 
 const Home = ({navigation}) => {
   return (
     <View style={styles.root}>
       <View style={styles.top}>
-        <Sheesh size={'75%'} />
+        <Text style={styles.titleTextStyle}>{'User is Logged In'}</Text>
+        <Icon name={'check-circle'} color={'#A8DAFA'} size={100} />
       </View>
     </View>
   );
@@ -31,11 +24,18 @@ const Home = ({navigation}) => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    backgroundColor: '#1d3557',
   },
   top: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  titleTextStyle: {
+    fontSize: 30,
+    color: '#A8DAFA',
+    textAlign: 'center',
+    margin: '5%',
   },
 });
 
