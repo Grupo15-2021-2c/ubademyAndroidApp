@@ -7,54 +7,51 @@
  */
 
 import React from 'react';
-import type {Node} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import {Button, DefaultTheme, TextInput} from 'react-native-paper';
+import {Button} from 'react-native-paper';
+import {
+  EmailInput,
+  SignInPasswordInput,
+} from '../components/TextInputComponents';
+import showToast from '../components/ToastUtilities';
+import processResponse from '../components/FetchUtilities';
+import {loginEndPoint} from '../Parameters/EndpointsUrls';
 
-const SignInButton = () => {
+const postLogIn = (form, navigation, setError) => {
+  console.log('[INFO] form: ' + JSON.stringify(form));
+
+  fetch(loginEndPoint, {
+    method: 'post',
+    mode: 'no-cors',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(form),
+  })
+    .then(processResponse)
+    .then(res => {
+      const {statusCode, data} = res;
+
+      console.log('[INFO] statusCode: ' + statusCode + ' data: ' + data);
+
+      if (data === true) {
+        navigation.navigate('Home');
+      } else {
+        showToast(data);
+        setError(true);
+      }
+    })
+    .catch(error => console.log('[ERROR] ' + error.message));
+};
+
+const SignInButton = ({form, navigation, setError}) => {
   return (
-    <Button mode="contained" onPress={() => console.log('Sign In: Pressed')}>
+    <Button
+      mode="contained"
+      onPress={() => postLogIn(form, navigation, setError)}>
       <Text style={styles.buttonText}>{'SIGN IN'}</Text>
     </Button>
-  );
-};
-
-const PasswordInput = ({title}): Node => {
-  const [text, setText] = React.useState('');
-  const [icon, setIcon] = React.useState('eye');
-  const [password, setPassword] = React.useState(true);
-
-  return (
-    <TextInput
-      label={title}
-      value={text}
-      secureTextEntry={password}
-      left={
-        <TextInput.Icon
-          name={icon}
-          onPress={() => {
-            setIcon(icon === 'eye' ? 'eye-off' : 'eye');
-            setPassword(!password);
-          }}
-        />
-      }
-      theme={textInputTheme}
-      onChangeText={textInput => setText(textInput)}
-    />
-  );
-};
-
-const EmailInput = ({title}): Node => {
-  const [text, setText] = React.useState('');
-
-  return (
-    <TextInput
-      label={title}
-      value={text}
-      left={<TextInput.Icon name="email" />}
-      theme={textInputTheme}
-      onChangeText={textInput => setText(textInput)}
-    />
   );
 };
 
@@ -62,7 +59,7 @@ const UbademyLogo = () => {
   return (
     <Image
       style={styles.logoStyle}
-      source={require('./android/app/src/main/res/images/adaptive-icon.png')}
+      source={require('../resources/images/adaptive-icon.png')}
     />
   );
 };
@@ -71,12 +68,15 @@ const BackgroundDetail = () => {
   return (
     <Image
       style={styles.backgroundDetailImageStyle}
-      source={require('./android/app/src/main/res/images/background-detail.png')}
+      source={require('../resources/images/background-detail.png')}
     />
   );
 };
 
-const App: () => Node = () => {
+const SignIn = ({navigation}) => {
+  const [form, setForm] = React.useState({email: '', password: ''});
+  const [error, setError] = React.useState(false);
+
   return (
     <View style={styles.root}>
       <View style={styles.backgroundDetail}>
@@ -91,13 +91,27 @@ const App: () => Node = () => {
       </View>
       <View style={styles.formStyle}>
         <View style={styles.margin}>
-          <EmailInput title={'Email'} />
+          <EmailInput
+            title={'Email'}
+            form={form}
+            setForm={setForm}
+            error={error}
+          />
         </View>
         <View style={styles.margin}>
-          <PasswordInput title={'Password'} />
+          <SignInPasswordInput
+            title={'Password'}
+            form={form}
+            setForm={setForm}
+            error={error}
+          />
         </View>
         <View style={styles.margin}>
-          <SignInButton />
+          <SignInButton
+            form={form}
+            navigation={navigation}
+            setError={setError}
+          />
         </View>
       </View>
       <Text style={styles.bottom}>
@@ -105,7 +119,7 @@ const App: () => Node = () => {
           {"Don't have an account? "}
         </Text>
         <Text
-          onPress={() => console.log('Sign Up: Pressed')}
+          onPress={() => navigation.navigate('Sign Up')}
           style={styles.singUpText}>
           {'Sign Up'}
         </Text>
@@ -172,16 +186,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const textInputTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    text: '#A8DAFA',
-    primary: '#A8DAFA',
-    placeholder: '#A8DAFA',
-    background: 'transparent',
-    disabled: '#A8DAFA',
-  },
-};
-
-export default App;
+export default SignIn;

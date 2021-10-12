@@ -5,7 +5,7 @@
 import * as React from 'react';
 import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 import {AppRegistry} from 'react-native';
-import App from './App';
+import App from './src/App';
 import {name as appName} from './app.json';
 
 const theme = {
@@ -14,7 +14,7 @@ const theme = {
   colors: {
     ...DefaultTheme.colors,
     primary: '#A8DAFA',
-    text: '#A8DAFA',
+    text: '#1d3557',
   },
 };
 
