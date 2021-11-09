@@ -1,25 +1,30 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Button, List} from 'react-native-paper';
-import {getSections} from '../api/CoursesApi';
+import {getResources} from '../../api/CoursesApi';
 
-const EditSections = ({route, navigation}) => {
-  const {courseId} = route.params;
+export const EditableResources = ({route, navigation}) => {
+  const {courseId, sectionId} = route.params;
 
   const [state, setState] = React.useState({
-    loading: false,
-    sections: [],
+    loading: true,
+    resources: [],
   });
 
   useEffect(() => {
-    getSections(courseId, setState);
-  }, [courseId]);
+    getResources(courseId, sectionId, setState);
+  }, [courseId, sectionId]);
 
   const GoToButton = ({destiny, text}) => {
     return (
       <Button
         mode="contained"
-        onPress={() => navigation.navigate(destiny, {courseId: courseId})}>
+        onPress={() =>
+          navigation.navigate(destiny, {
+            courseId: courseId,
+            sectionId: sectionId,
+          })
+        }>
         <Text style={styles.buttonText}>{text}</Text>
       </Button>
     );
@@ -28,18 +33,17 @@ const EditSections = ({route, navigation}) => {
   return (
     <View style={styles.root}>
       <List.Section>
-        {!state.loading
-          ? state.sections.map(item => {
+        {state.loading === false
+          ? state.resources.map(item => {
               return (
                 <List.Item
                   key={item.id}
-                  title={item.subtitle}
+                  title={item.type}
                   titleStyle={styles.titleStyle}
                   style={styles.listItem}
                   onPress={() =>
-                    navigation.navigate('Editable section', {
-                      courseId: courseId,
-                      sectionId: item.id,
+                    navigation.navigate('Resource view', {
+                      resource: item,
                     })
                   }
                 />
@@ -50,8 +54,8 @@ const EditSections = ({route, navigation}) => {
       <View style={styles.addButton}>
         <GoToButton
           navigation={navigation}
-          text={'Add Section'}
-          destiny={'Creat Section'}
+          text={'Add Image'}
+          destiny={'Add image'}
         />
       </View>
     </View>
@@ -79,5 +83,3 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
 });
-
-export default EditSections;

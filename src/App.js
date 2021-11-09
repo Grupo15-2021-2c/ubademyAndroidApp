@@ -26,6 +26,13 @@ import SectionsView from './screens/SectionsView';
 import SectionView from './screens/SectionView';
 import CourseCreation from './screens/creat/CourseCreationView';
 import {SectionCreation} from './screens/SectionCreationView';
+import {ViewResources} from './screens/ViewResourses';
+import {resourceView} from './screens/ResourceView';
+import {EditableSection} from './screens/EditableSection';
+import {EditableResources} from './screens/editable/EditResources';
+import {AddImage} from './screens/AddImageView';
+import {EditCourse} from './screens/editable/EditCourseView';
+import {EditSection} from './screens/editable/EditSectionView';
 
 const Stack = createStackNavigator();
 
@@ -106,6 +113,24 @@ const App: () => Node = () => {
           }}
         />
         <Stack.Screen
+          name="View Resources"
+          component={ViewResources}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="Resource view"
+          component={resourceView}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
           name="Enrolled"
           component={Enrolled}
           options={{
@@ -142,6 +167,42 @@ const App: () => Node = () => {
           }}
         />
         <Stack.Screen
+          name="Editable section"
+          component={EditableSection}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="Editable resources"
+          component={EditableResources}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="Edit section"
+          component={EditSection}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="Edit course"
+          component={EditCourse}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
           name="Sections View"
           component={SectionsView}
           options={{
@@ -153,6 +214,15 @@ const App: () => Node = () => {
         <Stack.Screen
           name="Section View"
           component={SectionView}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="Add image"
+          component={AddImage}
           options={{
             presentation: 'modal',
             headerShown: false,

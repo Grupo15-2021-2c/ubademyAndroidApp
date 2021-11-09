@@ -11,7 +11,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-paper';
 import {getSection} from '../api/CoursesApi';
 
-const SectionView = ({route, navigation}) => {
+export const EditableSection = ({route, navigation}) => {
   const {courseId, sectionId} = route.params;
 
   const [state, setState] = useState({
@@ -26,7 +26,12 @@ const SectionView = ({route, navigation}) => {
     return (
       <Button
         mode="contained"
-        onPress={() => navigation.navigate(destiny, {courseId, sectionId})}>
+        onPress={() =>
+          navigation.navigate(destiny, {
+            courseId: courseId,
+            sectionId: sectionId,
+          })
+        }>
         <Text style={styles.buttonText}>{text}</Text>
       </Button>
     );
@@ -49,9 +54,19 @@ const SectionView = ({route, navigation}) => {
               <GoToButton
                 navigation={navigation}
                 text={'Resources'}
-                destiny={'View Resources'}
-                courseId={courseId}
+                destiny={'Editable resources'}
               />
+            </View>
+            <View style={styles.padding}>
+              <Button
+                mode="contained"
+                onPress={() =>
+                  navigation.navigate('Edit section', {
+                    sectionInfo: state.section,
+                  })
+                }>
+                <Text style={styles.buttonText}>{'Edit section'}</Text>
+              </Button>
             </View>
           </View>
         </View>
@@ -101,5 +116,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-export default SectionView;

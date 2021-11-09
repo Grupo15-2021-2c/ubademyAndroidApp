@@ -10,6 +10,7 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-paper';
 import {getCourse} from '../api/CoursesApi';
+import {categorys} from '../Parameters/categorys';
 
 const EditableCourse = ({route, navigation}) => {
   const {id} = route.params;
@@ -33,7 +34,9 @@ const EditableCourse = ({route, navigation}) => {
         <View style={styles.root}>
           <View style={styles.header}>
             <Text style={styles.titleText}>{state.course.title}</Text>
-            <Text style={styles.categoryText}>{state.course.category}</Text>
+            <Text style={styles.categoryText}>
+              {categorys[state.course.categoryId]}
+            </Text>
             <Text style={styles.descriptionText}>
               {state.course.description}
             </Text>
@@ -43,7 +46,13 @@ const EditableCourse = ({route, navigation}) => {
               <GoToButton text={'View enrolled'} destiny={'Enrolled'} />
             </View>
             <View style={styles.padding}>
-              <GoToButton text={'Edit course info'} destiny={'User Screen'} />
+              <Button
+                mode="contained"
+                onPress={() =>
+                  navigation.navigate('Edit course', {courseInfo: state.course})
+                }>
+                <Text style={styles.buttonText}>{'Edit course info'}</Text>
+              </Button>
             </View>
             <View style={styles.padding}>
               <GoToButton text={'View sections'} destiny={'Edit Sections'} />
