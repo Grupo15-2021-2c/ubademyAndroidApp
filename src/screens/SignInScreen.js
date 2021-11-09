@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {AsyncStorage, Image, StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-paper';
 import {
   EmailInput,
@@ -30,7 +30,7 @@ const postLogIn = (form, navigation, setError) => {
     body: JSON.stringify(form),
   })
     .then(processResponse)
-    .then(res => {
+    .then(async res => {
       const {statusCode, data} = res;
 
       console.log(
@@ -39,6 +39,12 @@ const postLogIn = (form, navigation, setError) => {
 
       if (data.status === 'success') {
         console.log(data.data);
+        await AsyncStorage.setItem(
+          '@ubademy:currentUserId',
+          data.data.id.toString(),
+        )
+          .then()
+          .then(() => console.log('@ubademy:currentUserId stored'));
         navigation.navigate('Home', {userId: data.data.id});
         setError(false);
       } else {

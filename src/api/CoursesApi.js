@@ -454,7 +454,7 @@ export const editCourse = (course, category, setError, navigation) => {
 };
 
 export const uploadImage = async (courseId, sectionId, image) => {
-  let url = resourcesEndPoint + '/' + courseId + '/sections/' + sectionId;
+  let url = resourcesEndPoint + '/' + 1 + '/sections/' + 1 + '/upload';
 
   console.log(image);
 

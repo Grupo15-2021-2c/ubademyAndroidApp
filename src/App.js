@@ -33,6 +33,7 @@ import {EditableResources} from './screens/editable/EditResources';
 import {AddImage} from './screens/AddImageView';
 import {EditCourse} from './screens/editable/EditCourseView';
 import {EditSection} from './screens/editable/EditSectionView';
+import {EditUser} from './screens/editable/EditUserView';
 
 const Stack = createStackNavigator();
 
@@ -169,6 +170,15 @@ const App: () => Node = () => {
         <Stack.Screen
           name="Editable section"
           component={EditableSection}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="Edit User"
+          component={EditUser}
           options={{
             presentation: 'modal',
             headerShown: false,

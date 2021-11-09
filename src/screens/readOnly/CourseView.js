@@ -59,11 +59,23 @@ const CourseView = ({route, navigation}) => {
       );
     }
     return (
-      <Button
-        mode="contained"
-        onPress={() => cancelInscription(userId, id, setEnrolledState)}>
-        <Text style={styles.buttonText}>{'Cancel'}</Text>
-      </Button>
+      <View style={styles.padding}>
+        <View style={styles.padding}>
+          <GoToButton
+            navigation={navigation}
+            text={'Sections'}
+            destiny={'Sections View'}
+            courseId={id}
+          />
+        </View>
+        <View style={styles.padding}>
+          <Button
+            mode="contained"
+            onPress={() => cancelInscription(userId, id, setEnrolledState)}>
+            <Text style={styles.buttonText}>{'Cancel'}</Text>
+          </Button>
+        </View>
+      </View>
     );
   };
 
@@ -81,19 +93,7 @@ const CourseView = ({route, navigation}) => {
             </Text>
           </View>
           <View style={styles.options}>
-            <View style={styles.padding}>
-              <GoToButton
-                navigation={navigation}
-                text={'Sections'}
-                destiny={'Sections View'}
-                courseId={id}
-              />
-            </View>
-            {!enrolledState.loading ? (
-              <View style={styles.padding}>
-                <EnrollButton />
-              </View>
-            ) : null}
+            {!enrolledState.loading ? <EnrollButton /> : null}
           </View>
         </View>
       );

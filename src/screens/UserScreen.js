@@ -1,10 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {getUserInfo} from '../api/UsersApi';
+import {currentUserId} from '../api/Storage';
+import {Button} from 'react-native-paper';
 
 const UserScreen = ({route, navigation}) => {
   const {userId} = route.params;
 
+  const [currentUser, setCurrentUser] = useState({id: 0});
   const [state, setState] = useState({
     loading: false,
     user: {
@@ -15,6 +18,7 @@ const UserScreen = ({route, navigation}) => {
   });
 
   useEffect(() => {
+    currentUserId(setCurrentUser);
     getUserInfo(userId, setState);
   }, [userId]);
 
@@ -30,6 +34,17 @@ const UserScreen = ({route, navigation}) => {
           <Text style={styles.nameTextStyle}>{state.user.email}</Text>
         </View>
       ) : null}
+      {currentUser.currentUserId === userId ? (
+        <View style={styles.editButton}>
+          <Button
+            mode="contained"
+            onPress={() =>
+              navigation.navigate('Edit User', {user: state.user})
+            }>
+            <Text style={styles.buttonText}>{'Edit'}</Text>
+          </Button>
+        </View>
+      ) : null}
     </View>
   );
 };
@@ -38,6 +53,11 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: '#1d3557',
+  },
+  editButton: {
+    flex: 1,
+    margin: '5%',
+    justifyContent: 'flex-end',
   },
   userImage: {
     flex: 10,
