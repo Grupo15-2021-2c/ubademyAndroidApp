@@ -3,10 +3,25 @@ name: Lint
 on: [ push ]
 
 jobs:
-  eslint:
+  build:
+
     runs-on: ubuntu-latest
+
+    env:
+      CODECOV_TOKEN: 'c7b42edd-37aa-4c42-a4eb-3546247bc544'
+
+    strategy:
+      matrix:
+        node-version: [12.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
     steps:
-      - uses: actions/checkout@v1
-      - uses: stefanoeb/eslint-action@1.0.2
-        with:
-          files: src/
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm i
+    - run: npm run build --if-present
+    - run: npm run lint
