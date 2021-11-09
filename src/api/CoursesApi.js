@@ -6,6 +6,7 @@ import {
 } from '../Parameters/EndpointsUrls';
 import processResponse from '../components/FetchUtilities';
 import showToast from '../components/ToastUtilities';
+import axios from 'axios';
 
 export const getCourses = setState => {
   setState({loading: true});
@@ -454,32 +455,33 @@ export const editCourse = (course, category, setError, navigation) => {
 };
 
 export const uploadImage = async (courseId, sectionId, image) => {
-  let url = resourcesEndPoint + '/' + 1 + '/sections/' + 1 + '/upload';
+  let url =
+    resourcesEndPoint + '/' + courseId + '/sections/' + sectionId + '/upload';
 
   console.log(image);
 
-  let body = new FormData();
+  let data = new FormData();
 
   let form = {
     uri: image.uri,
     type: image.type,
-    name: image.name,
+    name: image.fileName,
   };
 
-  body.append('file', form);
+  data.append('file', form);
 
-  console.log(url);
+  console.log();
 
-  let result = await fetch(url, {
-    method: 'post',
-    mode: 'no-cors',
-    headers: {
-      'Content-Type': 'multipart/form-data',
-    },
-    body: body,
-  }).catch(error => console.log('[ERROR] ' + error.message));
+  var requestOptions = {
+    method: 'POST',
+    body: data,
+    redirect: 'manual',
+  };
 
-  console.log(result);
+  fetch(url, requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
 };
 
 export const editSection = (section, setError, navigation) => {
