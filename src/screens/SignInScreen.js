@@ -38,7 +38,9 @@ const postLogIn = (form, navigation, setError) => {
       );
 
       if (data.status === 'success') {
-        navigation.navigate('Home');
+        console.log(data.data);
+        navigation.navigate('Home', {userId: data.data.id});
+        setError(false);
       } else {
         showToast(data.message);
         setError(true);

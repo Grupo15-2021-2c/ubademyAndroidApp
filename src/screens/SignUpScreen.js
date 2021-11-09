@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {
   PasswordInput,
   EmailInput,
@@ -21,26 +21,23 @@ import {registerEndPoint} from '../Parameters/EndpointsUrls';
 import {Icon} from 'react-native-elements';
 import {passwordRegex, validateEmail} from '../Parameters/Regex';
 
-const postRegister = (form, navigation, setError) => {
+const postRegister = (form, navigation, setError, setNameError) => {
   console.log('[INFO] form: ' + JSON.stringify(form));
 
-  if (
-    !RegExp(passwordRegex).test(form.password) &&
-    !validateEmail(form.email)
-  ) {
-    showToast('Entered email and password are not valid');
-    setError(true);
-    return;
-  }
-
-  if (!RegExp(passwordRegex).test(form.password)) {
-    showToast('Entered password is not valid');
+  if (form.lastName === '' || form.firstName === '') {
+    showToast('Incomplete name info');
+    setNameError(true);
     return;
   }
 
   if (!validateEmail(form.email)) {
     showToast('Entered email is not valid');
     setError(true);
+    return;
+  }
+
+  if (!RegExp(passwordRegex).test(form.password)) {
+    showToast('Entered password is not valid');
     return;
   }
 
@@ -77,11 +74,11 @@ const BackgroundDetail = () => {
   );
 };
 
-const SignUpButton = ({form, navigation, setError}) => {
+const SignUpButton = ({form, navigation, setError, setNameError}) => {
   return (
     <Button
       mode="contained"
-      onPress={() => postRegister(form, navigation, setError)}>
+      onPress={() => postRegister(form, navigation, setError, setNameError)}>
       <Text style={styles.buttonText}>{'CREATE ACCOUNT'}</Text>
     </Button>
   );
@@ -95,9 +92,10 @@ const SignUp = ({navigation}) => {
     password: '',
   });
   const [error, setError] = React.useState(false);
+  const [nameError, setNameError] = React.useState(false);
 
   return (
-    <View style={styles.root}>
+    <ScrollView style={styles.root}>
       <View style={styles.backgroundDetail}>
         <BackgroundDetail />
       </View>
@@ -109,10 +107,20 @@ const SignUp = ({navigation}) => {
       </View>
       <View style={styles.formStyle}>
         <View style={styles.margin}>
-          <FirsName title={'First name'} form={form} setForm={setForm} />
+          <FirsName
+            title={'First name'}
+            form={form}
+            setForm={setForm}
+            error={nameError}
+          />
         </View>
         <View style={styles.margin}>
-          <LastName title={'Last name'} form={form} setForm={setForm} />
+          <LastName
+            title={'Last name'}
+            form={form}
+            setForm={setForm}
+            error={nameError}
+          />
         </View>
         <View style={styles.margin}>
           <EmailInput
@@ -135,6 +143,7 @@ const SignUp = ({navigation}) => {
             form={form}
             navigation={navigation}
             setError={setError}
+            setNameError={setNameError}
           />
         </View>
       </View>
@@ -147,13 +156,12 @@ const SignUp = ({navigation}) => {
           }
         </Text>
       </Text>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   root: {
-    flex: 1,
     backgroundColor: '#1d3557',
   },
   backgroundDetailImageStyle: {
@@ -169,7 +177,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   formStyle: {
-    flex: 5,
     padding: '2%',
     marginTop: '5%',
   },
@@ -178,6 +185,7 @@ const styles = StyleSheet.create({
   },
   headerStyle: {
     flex: 2,
+    marginTop: '30%',
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
@@ -197,9 +205,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   bottom: {
-    flex: 1,
     textAlign: 'center',
     margin: '2%',
+    marginTop: '30%',
   },
 });
 

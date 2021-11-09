@@ -86,12 +86,13 @@ const EmailInput = ({title, form, setForm, error}): Node => {
   );
 };
 
-const FirsName = ({title, form, setForm}): Node => {
+const FirsName = ({title, form, setForm, error}): Node => {
   return (
     <TextInput
       style={styles.iconStyle}
       label={title}
       value={form.firstName}
+      error={error}
       left={<TextInput.Icon name="account" color={'#A8DAFA'} />}
       theme={textInputTheme}
       onChangeText={textInput => setForm({...form, firstName: textInput})}
@@ -99,12 +100,13 @@ const FirsName = ({title, form, setForm}): Node => {
   );
 };
 
-const LastName = ({title, form, setForm}): Node => {
+const LastName = ({title, form, setForm, error}): Node => {
   return (
     <TextInput
       style={styles.iconStyle}
       label={title}
       value={form.lastName}
+      error={error}
       left={<TextInput.Icon name="account" color={'#A8DAFA'} />}
       theme={textInputTheme}
       onChangeText={textInput => setForm({...form, lastName: textInput})}
