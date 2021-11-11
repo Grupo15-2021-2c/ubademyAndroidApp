@@ -34,6 +34,7 @@ import {AddImage} from './screens/AddImageView';
 import {EditCourse} from './screens/editable/EditCourseView';
 import {EditSection} from './screens/editable/EditSectionView';
 import {EditUser} from './screens/editable/EditUserView';
+import {AddPdf} from './screens/creat/AddPdfView';
 
 const Stack = createStackNavigator();
 
@@ -71,6 +72,15 @@ const App: () => Node = () => {
         <Stack.Screen
           name="Creat Course"
           component={CourseCreation}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="Add Pdf"
+          component={AddPdf}
           options={{
             presentation: 'modal',
             headerShown: false,

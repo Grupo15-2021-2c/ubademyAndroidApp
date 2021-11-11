@@ -6,7 +6,6 @@ import {
 } from '../Parameters/EndpointsUrls';
 import processResponse from '../components/FetchUtilities';
 import showToast from '../components/ToastUtilities';
-import axios from 'axios';
 
 export const getCourses = setState => {
   setState({loading: true});
@@ -530,4 +529,26 @@ export const editSection = (section, setError, navigation) => {
       }
     })
     .catch(error => console.log('[ERROR] ' + error.message));
+};
+
+export const uploadPdf = async (courseId, sectionId, pdf, navigation) => {
+  let url =
+    resourcesEndPoint + '/' + courseId + '/sections/' + sectionId + '/upload';
+
+  console.log(pdf);
+
+  let data = new FormData();
+
+  data.append('file', pdf);
+
+  var requestOptions = {
+    method: 'POST',
+    body: data,
+    redirect: 'manual',
+  };
+
+  fetch(url, requestOptions)
+    .then(response => response.text())
+    .then(result => console.log(result))
+    .catch(error => console.log('error', error));
 };

@@ -51,12 +51,21 @@ export const EditableResources = ({route, navigation}) => {
             })
           : null}
       </List.Section>
-      <View style={styles.addButton}>
-        <GoToButton
-          navigation={navigation}
-          text={'Add Image'}
-          destiny={'Add image'}
-        />
+      <View style={styles.options}>
+        <View style={styles.padding}>
+          <GoToButton
+            navigation={navigation}
+            text={'Add Image'}
+            destiny={'Add image'}
+          />
+        </View>
+        <View style={styles.padding}>
+          <GoToButton
+            navigation={navigation}
+            text={'Add PDF'}
+            destiny={'Add Pdf'}
+          />
+        </View>
       </View>
     </View>
   );
@@ -76,10 +85,12 @@ const styles = StyleSheet.create({
     margin: '2%',
     backgroundColor: '#A8DAFA',
   },
-  addButton: {
+  options: {
     flex: 1,
-    margin: '2%',
-    padding: '5%',
+    paddingBottom: '10%',
     justifyContent: 'flex-end',
+  },
+  padding: {
+    margin: '2%',
   },
 });
