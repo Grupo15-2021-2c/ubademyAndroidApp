@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {List} from 'react-native-paper';
 import {getResources} from '../api/CoursesApi';
 
@@ -16,15 +16,17 @@ export const ViewResources = ({route, navigation}) => {
   }, [courseId, sectionId]);
 
   return (
-    <View style={styles.root}>
+    <ScrollView style={styles.root}>
       <List.Section>
         {state.loading === false
           ? state.resources.map(item => {
               return (
                 <List.Item
                   key={item.id}
-                  title={item.type}
+                  title={item.name}
                   titleStyle={styles.titleStyle}
+                  description={item.type}
+                  descriptionStyle={styles.description}
                   style={styles.listItem}
                   onPress={() =>
                     navigation.navigate('Resource view', {
@@ -36,7 +38,7 @@ export const ViewResources = ({route, navigation}) => {
             })
           : null}
       </List.Section>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -47,7 +49,9 @@ const styles = StyleSheet.create({
   },
   titleStyle: {
     fontWeight: 'bold',
-    fontSize: 26,
+    color: '#1d3557',
+  },
+  description: {
     color: '#1d3557',
   },
   listItem: {

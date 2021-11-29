@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Button, List} from 'react-native-paper';
 import {getResources} from '../../api/CoursesApi';
 
@@ -32,41 +32,46 @@ export const EditableResources = ({route, navigation}) => {
 
   return (
     <View style={styles.root}>
-      <List.Section>
-        {state.loading === false
-          ? state.resources.map(item => {
-              return (
-                <List.Item
-                  key={item.id}
-                  title={item.type}
-                  titleStyle={styles.titleStyle}
-                  style={styles.listItem}
-                  onPress={() =>
-                    navigation.navigate('Resource view', {
-                      resource: item,
-                    })
-                  }
-                />
-              );
-            })
-          : null}
-      </List.Section>
-      <View style={styles.options}>
-        <View style={styles.padding}>
-          <GoToButton
-            navigation={navigation}
-            text={'Add Image'}
-            destiny={'Add image'}
-          />
+      <ScrollView>
+        <List.Section>
+          {state.loading === false
+            ? state.resources.map(item => {
+                return (
+                  <List.Item
+                    key={item.id}
+                    title={item.name}
+                    titleStyle={styles.titleStyle}
+                    description={item.type}
+                    descriptionStyle={styles.descriptionStyle}
+                    style={styles.listItem}
+                    onPress={() =>
+                      navigation.navigate('Resource view', {
+                        resource: item,
+                      })
+                    }
+                  />
+                );
+              })
+            : null}
+        </List.Section>
+
+        <View style={styles.options}>
+          <View style={styles.padding}>
+            <GoToButton
+              navigation={navigation}
+              text={'Add Image'}
+              destiny={'Add image'}
+            />
+          </View>
+          <View style={styles.padding}>
+            <GoToButton
+              navigation={navigation}
+              text={'Add PDF'}
+              destiny={'Add Pdf'}
+            />
+          </View>
         </View>
-        <View style={styles.padding}>
-          <GoToButton
-            navigation={navigation}
-            text={'Add PDF'}
-            destiny={'Add Pdf'}
-          />
-        </View>
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -78,7 +83,12 @@ const styles = StyleSheet.create({
   },
   titleStyle: {
     fontWeight: 'bold',
-    fontSize: 26,
+    color: '#1d3557',
+  },
+  descriptionStyle: {
+    color: '#1d3557',
+  },
+  description: {
     color: '#1d3557',
   },
   listItem: {

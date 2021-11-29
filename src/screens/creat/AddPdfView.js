@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-paper';
 import DocumentPicker from 'react-native-document-picker';
-import {uploadImage, uploadPdf} from '../../api/CoursesApi';
+import {uploadPdf} from '../../api/CoursesApi';
 
 export const AddPdf = ({route, navigation}) => {
   const {courseId, sectionId} = route.params;

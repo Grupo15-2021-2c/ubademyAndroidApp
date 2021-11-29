@@ -17,7 +17,7 @@ export const AddImage = ({route, navigation}) => {
       <View style={styles.uploadButton}>
         <Button
           mode="contained"
-          onPress={() => uploadImage(courseId, sectionId, uri)}>
+          onPress={() => uploadImage(courseId, sectionId, uri, navigation)}>
           <Text style={styles.buttonText}>{'Add Image'}</Text>
         </Button>
       </View>

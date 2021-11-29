@@ -379,9 +379,8 @@ export const cancelInscription = (userId, id, setEnrolledState) => {
 export const getResources = (courseId, sectionId, setState) => {
   setState({loading: true});
 
-  let url = resourcesEndPoint + '/' + courseId + '/sections/' + sectionId;
-
-  console.log(url);
+  let url =
+    coursesEndPoint + '/' + courseId + '/sections/' + sectionId + '/resources';
 
   fetch(url, {
     method: 'get',
@@ -453,9 +452,9 @@ export const editCourse = (course, category, setError, navigation) => {
     .catch(error => console.log('[ERROR] ' + error.message));
 };
 
-export const uploadImage = async (courseId, sectionId, image) => {
+export const uploadImage = async (courseId, sectionId, image, navigation) => {
   let url =
-    resourcesEndPoint + '/' + courseId + '/sections/' + sectionId + '/upload';
+    coursesEndPoint + '/' + courseId + '/sections/' + sectionId + '/resources';
 
   console.log(image);
 
@@ -479,7 +478,13 @@ export const uploadImage = async (courseId, sectionId, image) => {
 
   fetch(url, requestOptions)
     .then(response => response.text())
-    .then(result => console.log(result))
+    .then(result => {
+      let res = JSON.parse(result);
+
+      if (res.status === 'success') {
+        navigation.goBack();
+      }
+    })
     .catch(error => console.log('error', error));
 };
 
@@ -533,7 +538,7 @@ export const editSection = (section, setError, navigation) => {
 
 export const uploadPdf = async (courseId, sectionId, pdf, navigation) => {
   let url =
-    resourcesEndPoint + '/' + courseId + '/sections/' + sectionId + '/upload';
+    coursesEndPoint + '/' + courseId + '/sections/' + sectionId + '/resources';
 
   console.log(pdf);
 
@@ -549,6 +554,12 @@ export const uploadPdf = async (courseId, sectionId, pdf, navigation) => {
 
   fetch(url, requestOptions)
     .then(response => response.text())
-    .then(result => console.log(result))
+    .then(result => {
+      let res = JSON.parse(result);
+
+      if (res.status === 'success') {
+        navigation.goBack();
+      }
+    })
     .catch(error => console.log('error', error));
 };
