@@ -53,6 +53,14 @@ const SectionView = ({route, navigation}) => {
                 courseId={courseId}
               />
             </View>
+            <View style={styles.padding}>
+              <GoToButton
+                navigation={navigation}
+                text={'Exams'}
+                destiny={'ListExams'}
+                courseId={courseId}
+              />
+            </View>
           </View>
         </View>
       );

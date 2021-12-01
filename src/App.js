@@ -35,6 +35,11 @@ import {EditCourse} from './screens/editable/EditCourseView';
 import {EditSection} from './screens/editable/EditSectionView';
 import {EditUser} from './screens/editable/EditUserView';
 import {AddPdf} from './screens/creat/AddPdfView';
+import {MyCourseExams} from './screens/editable/myCourseExames';
+import {CreatExam} from './screens/creat/CreatExam';
+import {EditExam} from './screens/editable/EditExam';
+import {AnswerExam} from './screens/exams/AnswerExam';
+import {ListExams} from './screens/readOnly/ListExams';
 
 const Stack = createStackNavigator();
 
@@ -79,8 +84,53 @@ const App: () => Node = () => {
           }}
         />
         <Stack.Screen
+          name="CreatExam"
+          component={CreatExam}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="EditExam"
+          component={EditExam}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="AnswerExam"
+          component={AnswerExam}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="ListExams"
+          component={ListExams}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
           name="Add Pdf"
           component={AddPdf}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="MyCourseExams"
+          component={MyCourseExams}
           options={{
             presentation: 'modal',
             headerShown: false,

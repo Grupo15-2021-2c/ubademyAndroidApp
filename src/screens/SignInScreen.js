@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import {AsyncStorage, Image, StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-paper';
 import {
@@ -16,6 +16,11 @@ import {
 import showToast from '../components/ToastUtilities';
 import processResponse from '../components/FetchUtilities';
 import {loginEndPoint} from '../Parameters/EndpointsUrls';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+} from '@react-native-community/google-signin';
+import {googleLogin} from '../api/login';
 
 const postLogIn = (form, navigation, setError) => {
   console.log('[INFO] form: ' + JSON.stringify(form));
@@ -87,6 +92,13 @@ const SignIn = ({navigation}) => {
   const [form, setForm] = React.useState({email: '', password: ''});
   const [error, setError] = React.useState(false);
 
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId:
+        '35307317074-0eaccllhnpi4qdguc6lna2tlahg6qacv.apps.googleusercontent.com',
+    });
+  });
+
   return (
     <View style={styles.root}>
       <View style={styles.backgroundDetail}>
@@ -122,6 +134,9 @@ const SignIn = ({navigation}) => {
             navigation={navigation}
             setError={setError}
           />
+        </View>
+        <View style={styles.margin}>
+          <GoogleSigninButton onPress={() => googleLogin(navigation)} />
         </View>
       </View>
       <Text style={styles.bottom}>
