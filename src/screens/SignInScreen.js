@@ -7,7 +7,7 @@
  */
 
 import React, {useEffect} from 'react';
-import {AsyncStorage, Image, StyleSheet, Text, View} from 'react-native';
+import {Alert, AsyncStorage, Image, StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-paper';
 import {
   EmailInput,
@@ -21,6 +21,7 @@ import {
   GoogleSigninButton,
 } from '@react-native-community/google-signin';
 import {googleLogin} from '../api/login';
+import messaging from '@react-native-firebase/messaging';
 
 const postLogIn = (form, navigation, setError) => {
   console.log('[INFO] form: ' + JSON.stringify(form));
@@ -44,12 +45,14 @@ const postLogIn = (form, navigation, setError) => {
 
       if (data.status === 'success') {
         console.log(data.data);
+
         await AsyncStorage.setItem(
           '@ubademy:currentUserId',
           data.data.id.toString(),
         )
           .then()
           .then(() => console.log('@ubademy:currentUserId stored'));
+
         navigation.navigate('Home', {userId: data.data.id});
         setError(false);
       } else {
@@ -97,7 +100,17 @@ const SignIn = ({navigation}) => {
       webClientId:
         '35307317074-0eaccllhnpi4qdguc6lna2tlahg6qacv.apps.googleusercontent.com',
     });
-  });
+
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
+  }, []);
 
   return (
     <View style={styles.root}>

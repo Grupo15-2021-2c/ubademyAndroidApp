@@ -40,6 +40,8 @@ import {CreatExam} from './screens/creat/CreatExam';
 import {EditExam} from './screens/editable/EditExam';
 import {AnswerExam} from './screens/exams/AnswerExam';
 import {ListExams} from './screens/readOnly/ListExams';
+import {Messages} from './screens/readOnly/Messages';
+import {Chat} from './screens/messages/Chat';
 
 const Stack = createStackNavigator();
 
@@ -77,6 +79,24 @@ const App: () => Node = () => {
         <Stack.Screen
           name="Creat Course"
           component={CourseCreation}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="Messages"
+          component={Messages}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="Chat"
+          component={Chat}
           options={{
             presentation: 'modal',
             headerShown: false,

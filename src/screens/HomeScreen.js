@@ -8,7 +8,7 @@
 
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import {Button} from 'react-native-paper';
+import {Button, TextInput} from 'react-native-paper';
 
 const UbademyLogo = () => {
   return (
@@ -57,6 +57,13 @@ const Home = ({route, navigation}) => {
             navigation={navigation}
             text={'Courses'}
             destiny={'Courses'}
+          />
+        </View>
+        <View style={styles.padding}>
+          <GoToButton
+            navigation={navigation}
+            text={'Messages'}
+            destiny={'Messages'}
           />
         </View>
       </View>
