@@ -1,31 +1,43 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {List} from 'react-native-paper';
+import {getActiveChats} from '../../api/MessagingApi';
 
-export const Messages = ({navigation}) => {
+export const Messages = ({route, navigation}) => {
+  const {userId} = route.params;
+
   const [state, setState] = React.useState({
-    chats: [
-      {id: 1, firstName: 'Facu'},
-      {id: 2, firstName: 'Ailen'},
-      {id: 3, firstName: 'Lolo'},
-    ],
+    userId: userId,
+    loading: true,
+    chats: [],
   });
+
+  useEffect(() => {
+    getActiveChats(state.userId, setState);
+  }, [state.userId]);
 
   return (
     <View style={styles.root}>
-      <List.Section>
-        {state.chats.map(item => {
-          return (
-            <List.Item
-              key={item.id}
-              title={item.firstName}
-              titleStyle={styles.titleStyle}
-              style={styles.listItem}
-              onPress={() => navigation.navigate('Chat', {id: item.id})}
-            />
-          );
-        })}
-      </List.Section>
+      {state.loading === false ? (
+        <List.Section>
+          {state.chats.map(item => {
+            return (
+              <List.Item
+                key={parseInt(item.user_id, 10)}
+                title={item.name}
+                titleStyle={styles.titleStyle}
+                style={styles.listItem}
+                onPress={() =>
+                  navigation.navigate('Chat', {
+                    userId: state.userId,
+                    destination_id: parseInt(item.user_id, 10),
+                  })
+                }
+              />
+            );
+          })}
+        </List.Section>
+      ) : null}
     </View>
   );
 };

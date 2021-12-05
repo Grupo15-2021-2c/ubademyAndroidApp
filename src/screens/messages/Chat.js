@@ -1,32 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import {Button, DefaultTheme, TextInput} from 'react-native-paper';
+import {DefaultTheme, TextInput} from 'react-native-paper';
+import {getChat, sendMessageApi} from '../../api/MessagingApi';
 
 export const Chat = ({route, navigation}) => {
+  const {userId, destination_id} = route.params;
+
   const [state, setState] = useState({
-    originId: 1,
-    destiniId: 2,
-    messages: [
-      {
-        originId: 1,
-        destiniId: 2,
-        message: 'Un mensaje superlargo para probar todo',
-      },
-      {
-        originId: 2,
-        destiniId: 1,
-        message: 'Hey!',
-      },
-    ],
+    loading: true,
+    originId: userId,
+    destiniId: destination_id,
+    messages: [],
     currentMessage: '',
   });
 
   useEffect(() => {
-    console.log('get chat');
-  }, []);
+    getChat(state.originId, state.destiniId, setState);
+  }, [state.destiniId, state.originId]);
 
   const showMessage = message => {
-    if (message.originId !== state.originId) {
+    if (message.origin_id !== state.originId.toString()) {
       return (
         <View style={styles.originMessage}>
           <Text style={styles.originText}>{message.message}</Text>
@@ -45,17 +38,19 @@ export const Chat = ({route, navigation}) => {
   };
 
   const sendMessage = () => {
-    console.log('Send');
+    sendMessageApi(state);
     setState({...state, currentMessage: ''});
   };
 
   return (
     <View style={styles.container}>
-      <ScrollView>
-        {state.messages.map(item => {
-          return showMessage(item);
-        })}
-      </ScrollView>
+      {state.loading === false ? (
+        <ScrollView>
+          {state.messages.map(item => {
+            return showMessage(item);
+          })}
+        </ScrollView>
+      ) : null}
       <View style={styles.addButton}>
         <TextInput
           value={state.currentMessage}
@@ -84,22 +79,23 @@ const styles = StyleSheet.create({
   },
   originMessage: {
     margin: '2%',
-    marginLeft: '10%',
+    marginRight: '10%',
     backgroundColor: '#fff',
   },
   destiniMessage: {
     margin: '2%',
     backgroundColor: '#A8DAFA',
-    marginRight: '10%',
+    marginLeft: '10%',
   },
   originText: {
-    textAlign: 'right',
+    textAlign: 'left',
     margin: '2%',
     fontSize: 26,
     fontWeight: 'bold',
     color: '#000',
   },
   destiniText: {
+    textAlign: 'right',
     margin: '2%',
     fontSize: 26,
     fontWeight: 'bold',

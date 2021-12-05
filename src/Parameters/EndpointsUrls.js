@@ -1,4 +1,7 @@
 const url = 'https://ubademy-g15-back-node-stage.herokuapp.com/api';
+const python = 'https://taller-ii-g15-ubademy-pychat.herokuapp.com';
+export const chatEndpoint = python + '/chat';
+export const deviceTokenEndpoint = python + '/users';
 const loginEndPoint = url + '/users/login';
 const registerEndPoint = url + '/users/register';
 export const usersEndPoint = url + '/users';

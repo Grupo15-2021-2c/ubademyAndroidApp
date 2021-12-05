@@ -3,6 +3,7 @@ import processResponse from '../components/FetchUtilities';
 import showToast from '../components/ToastUtilities';
 import {googleLoginEndpoint} from '../Parameters/EndpointsUrls';
 import messaging from '@react-native-firebase/messaging';
+import {sendUserDeviceToken} from './MessagingApi';
 
 export const googleLogin = async navigation => {
   try {
@@ -12,9 +13,7 @@ export const googleLogin = async navigation => {
 
     const token = {tokenId: userInfo.idToken};
 
-    let url = googleLoginEndpoint;
-
-    fetch(url, {
+    fetch(googleLoginEndpoint, {
       method: 'post',
       mode: 'no-cors',
       headers: {
@@ -30,8 +29,8 @@ export const googleLogin = async navigation => {
         if (statusCode === 200) {
           console.log(data);
 
-          const token = await messaging().getToken();
-          console.log({token});
+          let deviceToken = await messaging().getToken();
+          sendUserDeviceToken(data.data.id, deviceToken, data.data.firstName);
 
           navigation.navigate('Home', {userId: data.data.id});
         } else {

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "35307317074",
+    "project_id": "ubademy-app",
+    "storage_bucket": "ubademy-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:35307317074:android:eca88cc9d7dd42edf83c8b",
+        "android_client_info": {
+          "package_name": "com.ubademyandroidapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "35307317074-8ricnli5faqf91sc68j8kdm60o0e1un3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ubademyandroidapp",
+            "certificate_hash": "3c74db0979b3099dffde2e1cc467e66a917f519d"
+          }
+        },
+        {
+          "client_id": "35307317074-0eaccllhnpi4qdguc6lna2tlahg6qacv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFbfmdj7vofWY_Oh9Epy8cv1lIrNcEjAo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "35307317074-0eaccllhnpi4qdguc6lna2tlahg6qacv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
