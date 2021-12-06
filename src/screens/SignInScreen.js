@@ -22,6 +22,7 @@ import {
 } from '@react-native-community/google-signin';
 import {googleLogin} from '../api/login';
 import messaging from '@react-native-firebase/messaging';
+import {sendUserDeviceToken} from '../api/MessagingApi';
 
 const postLogIn = (form, navigation, setError) => {
   console.log('[INFO] form: ' + JSON.stringify(form));
@@ -52,6 +53,9 @@ const postLogIn = (form, navigation, setError) => {
         )
           .then()
           .then(() => console.log('@ubademy:currentUserId stored'));
+
+        let deviceToken = await messaging().getToken();
+        sendUserDeviceToken(data.data.id, deviceToken, data.data.firstName);
 
         navigation.navigate('Home', {userId: data.data.id});
         setError(false);

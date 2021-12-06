@@ -1,7 +1,8 @@
 import {
+  categoriesEndpoint,
   coursesEndPoint,
   creatorsEndPoint,
-  resourcesEndPoint,
+  underSubscription,
   usersEndPoint,
 } from '../Parameters/EndpointsUrls';
 import processResponse from '../components/FetchUtilities';
@@ -562,4 +563,74 @@ export const uploadPdf = async (courseId, sectionId, pdf, navigation) => {
       }
     })
     .catch(error => console.log('error', error));
+};
+
+export const getCoursesSubscriptionType = (type, setState) => {
+  setState(prevState => {
+    let modifiableState = Object.assign({}, prevState);
+    modifiableState.loading = true;
+    return modifiableState;
+  });
+
+  let url = underSubscription + '/' + type;
+
+  console.log(url);
+
+  fetch(url, {
+    method: 'get',
+    mode: 'no-cors',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(processResponse)
+    .then(res => {
+      const {statusCode, data} = res;
+
+      if (statusCode === 200) {
+        console.log(data);
+        setState({
+          loading: false,
+          subscriptionType: type,
+          courses: data.data,
+        });
+      }
+    })
+    .catch(error => console.error(error.message));
+};
+
+export const getCoursesCategory = (category, setState) => {
+  setState(prevState => {
+    let modifiableState = Object.assign({}, prevState);
+    modifiableState.loading = true;
+    return modifiableState;
+  });
+
+  let url = categoriesEndpoint + '/' + category;
+
+  console.log(url);
+
+  fetch(url, {
+    method: 'get',
+    mode: 'no-cors',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(processResponse)
+    .then(res => {
+      const {statusCode, data} = res;
+
+      if (statusCode === 200) {
+        console.log(data);
+        setState({
+          loading: false,
+          category: category,
+          courses: data.data,
+        });
+      }
+    })
+    .catch(error => console.error(error.message));
 };

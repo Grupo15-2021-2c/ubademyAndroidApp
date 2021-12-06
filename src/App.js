@@ -42,6 +42,8 @@ import {AnswerExam} from './screens/exams/AnswerExam';
 import {ListExams} from './screens/readOnly/ListExams';
 import {Messages} from './screens/readOnly/Messages';
 import {Chat} from './screens/messages/Chat';
+import {CourseBySubscriptionType} from './screens/readOnly/CourseBySubscriptionType';
+import {CourseByCategory} from './screens/readOnly/CourseByCategory';
 
 const Stack = createStackNavigator();
 
@@ -95,8 +97,26 @@ const App: () => Node = () => {
           }}
         />
         <Stack.Screen
+          name="CourseBySubscriptionType"
+          component={CourseBySubscriptionType}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
           name="Chat"
           component={Chat}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="CourseByCategory"
+          component={CourseByCategory}
           options={{
             presentation: 'modal',
             headerShown: false,
