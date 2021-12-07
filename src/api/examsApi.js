@@ -151,10 +151,11 @@ export const answerExam = (state, userId, navigation) => {
   console.log(uri);
 
   let form = {
-    userId: userId.currentUserId,
+    userId: userId,
     answers: state.answers,
   };
 
+  console.log('exam answer');
   console.log(form);
 
   fetch(uri, {
@@ -214,6 +215,7 @@ export const getUserAnswer = (state, userId, setAnswer) => {
             return;
           }
         }
+        setAnswer({loading: false, answers: null});
       }
     })
     .catch(error => console.error(error.message));

@@ -1,72 +1,88 @@
-import React, {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import {DefaultTheme, TextInput} from 'react-native-paper';
+import React, {useEffect, useState, useCallback, useLayoutEffect} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {DefaultTheme} from 'react-native-paper';
 import {getChat, sendMessageApi} from '../../api/MessagingApi';
+import {GiftedChat} from 'react-native-gifted-chat';
+import messaging from '@react-native-firebase/messaging';
 
 export const Chat = ({route, navigation}) => {
-  const {userId, destination_id} = route.params;
-
+  const {userId, destination_id, name} = route.params;
+  const [messages, setMessages] = useState([]);
   const [state, setState] = useState({
     loading: true,
     originId: userId,
     destiniId: destination_id,
+    name: name,
     messages: [],
     currentMessage: '',
   });
 
   useEffect(() => {
     getChat(state.originId, state.destiniId, setState);
-  }, [state.destiniId, state.originId]);
+    setMessages({
+      _id: Math.random(),
+      createdAt: new Date(),
+      text: '',
+      user: {
+        _id: state.destiniId,
+        name: name,
+      },
+    });
+    messaging().onMessage(async remoteMessage => {
+      console.log('aca', remoteMessage.data);
+      getChat(state.originId, state.destiniId, setState);
+    });
+  }, [name, state.destiniId, state.originId]);
 
   const showMessage = message => {
     if (message.origin_id !== state.originId.toString()) {
-      return (
-        <View style={styles.originMessage}>
-          <Text style={styles.originText}>{message.message}</Text>
-        </View>
-      );
+      return {
+        _id: Math.random(),
+        createdAt: new Date(),
+        text: message.message,
+        user: {
+          _id: message.origin_id,
+          name: name,
+        },
+      };
     }
-    return (
-      <View style={styles.destiniMessage}>
-        <Text style={styles.destiniText}>{message.message}</Text>
-      </View>
+    return {
+      _id: Math.random(),
+      createdAt: new Date(),
+      text: message.message,
+      user: {
+        _id: state.originId,
+        name: name,
+      },
+    };
+  };
+
+  const onSend = useCallback((message = []) => {
+    setMessages(previousMessages =>
+      GiftedChat.append(previousMessages, message),
     );
-  };
-
-  const handleUserInput = e => {
-    setState({...state, currentMessage: e});
-  };
-
-  const sendMessage = () => {
+    state.currentMessage = message[0].text;
     sendMessageApi(state);
-    setState({...state, currentMessage: ''});
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useLayoutEffect(() => {
+    setMessages(state.messages.reverse().map(doc => showMessage(doc)));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.destiniId, state]);
 
   return (
     <View style={styles.container}>
-      {state.loading === false ? (
-        <ScrollView>
-          {state.messages.map(item => {
-            return showMessage(item);
-          })}
-        </ScrollView>
-      ) : null}
-      <View style={styles.addButton}>
-        <TextInput
-          value={state.currentMessage}
-          maxLength={256}
-          multiline={true}
-          theme={textInputTheme}
-          onChangeText={handleUserInput}
-          right={
-            <TextInput.Icon
-              name="arrow-right"
-              color={'#A8DAFA'}
-              onPress={sendMessage}
-            />
-          }
-        />
-      </View>
+      <GiftedChat
+        messages={messages}
+        isTyping={true}
+        placeholder={'Escriba su mensaje...'}
+        onSend={message => onSend(message)}
+        user={{
+          _id: state.originId,
+        }}
+        scrollToBottom={true}
+      />
     </View>
   );
 };

@@ -16,7 +16,10 @@ export const ScoreExam = ({route, navigation}) => {
     setState(prevState => {
       let modifiableState = Object.assign({}, prevState);
 
-      modifiableState.answers.score = modifiableState.answers.score.toString();
+      if (modifiableState.answers.score !== null) {
+        modifiableState.answers.score =
+          modifiableState.answers.score.toString();
+      }
 
       for (const i in modifiableState.answers.answers) {
         modifiableState.answers.answers[i].questionNum = i;

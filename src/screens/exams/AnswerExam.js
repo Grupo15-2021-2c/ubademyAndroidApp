@@ -8,7 +8,7 @@ export const AnswerExam = ({route, navigation}) => {
 
   const [answer, setAnswer] = useState({
     loading: true,
-    answer: null,
+    answers: [],
   });
   const [state, setState] = useState({
     exam: exam,
@@ -38,7 +38,7 @@ export const AnswerExam = ({route, navigation}) => {
   }, [currentUser]);
 
   const showExam = () => {
-    if (answer.answer === null) {
+    if (answer.answers === null) {
       return (
         <View style={styles.container}>
           <ScrollView>

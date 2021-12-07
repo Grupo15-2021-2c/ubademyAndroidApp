@@ -104,16 +104,6 @@ const SignIn = ({navigation}) => {
       webClientId:
         '35307317074-0eaccllhnpi4qdguc6lna2tlahg6qacv.apps.googleusercontent.com',
     });
-
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      showToast('New message from ' + remoteMessage.data.name);
-    });
-
-    messaging().setBackgroundMessageHandler(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
-
-    return unsubscribe;
   }, []);
 
   return (

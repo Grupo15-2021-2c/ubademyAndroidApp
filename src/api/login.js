@@ -4,6 +4,7 @@ import showToast from '../components/ToastUtilities';
 import {googleLoginEndpoint} from '../Parameters/EndpointsUrls';
 import messaging from '@react-native-firebase/messaging';
 import {sendUserDeviceToken} from './MessagingApi';
+import {AsyncStorage} from 'react-native';
 
 export const googleLogin = async navigation => {
   try {
@@ -31,6 +32,13 @@ export const googleLogin = async navigation => {
 
           let deviceToken = await messaging().getToken();
           sendUserDeviceToken(data.data.id, deviceToken, data.data.firstName);
+
+          await AsyncStorage.setItem(
+            '@ubademy:currentUserId',
+            data.data.id.toString(),
+          )
+            .then()
+            .then(() => console.log('@ubademy:currentUserId stored'));
 
           navigation.navigate('Home', {userId: data.data.id});
         } else {

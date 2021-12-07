@@ -7,7 +7,7 @@
  */
 
 import 'react-native-gesture-handler';
-import React from 'react';
+import React, {useEffect} from 'react';
 import type {Node} from 'react';
 import SignIn from './screens/SignInScreen';
 import SignUp from './screens/SignUpScreen';
@@ -47,10 +47,25 @@ import {CourseByCategory} from './screens/readOnly/CourseByCategory';
 import {StudentsExams} from './screens/readOnly/studentsExams';
 import {PublishedExams} from './screens/readOnly/PublishedExams';
 import {ScoreExam} from './screens/editable/ScoreExam';
+import messaging from '@react-native-firebase/messaging';
+import showToast from './components/ToastUtilities';
+import {Alert} from 'react-native';
 
 const Stack = createStackNavigator();
 
 const App: () => Node = () => {
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      showToast('New message from ' + remoteMessage.data.name);
+    });
+
+    messaging().setBackgroundMessageHandler(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
+  }, []);
+
   return (
     <NavigationContainer>
       <Stack.Navigator>

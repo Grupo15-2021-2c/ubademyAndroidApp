@@ -44,7 +44,20 @@ const UserScreen = ({route, navigation}) => {
             <Text style={styles.buttonText}>{'Edit'}</Text>
           </Button>
         </View>
-      ) : null}
+      ) : (
+        <View style={styles.editButton}>
+          <Button
+            mode="contained"
+            onPress={() =>
+              navigation.navigate('Chat', {
+                userId: currentUser.currentUserId,
+                destination_id: state.user,
+              })
+            }>
+            <Text style={styles.buttonText}>{'Send message'}</Text>
+          </Button>
+        </View>
+      )}
     </View>
   );
 };
