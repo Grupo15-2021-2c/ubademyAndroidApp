@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Button, List} from 'react-native-paper';
-import {getExams} from '../../api/examsApi';
+import {getExams, getPublishedExams} from '../../api/examsApi';
 import {CreatExam} from '../creat/CreatExam';
 
 export const ListExams = ({route, navigation}) => {
-  const {courseId, sectionId} = route.params;
+  const {courseId, sectionId, userId} = route.params;
 
   const [state, setState] = React.useState({
     loading: true,
@@ -13,7 +13,7 @@ export const ListExams = ({route, navigation}) => {
   });
 
   useEffect(() => {
-    getExams(courseId, sectionId, setState);
+    getPublishedExams(courseId, sectionId, setState);
   }, [courseId, sectionId]);
 
   const GoToButton = ({destiny, text}) => {
@@ -45,7 +45,8 @@ export const ListExams = ({route, navigation}) => {
                     style={styles.listItem}
                     onPress={() =>
                       navigation.navigate('AnswerExam', {
-                        courseId: courseId,
+                        exam: item,
+                        userId,
                       })
                     }
                   />

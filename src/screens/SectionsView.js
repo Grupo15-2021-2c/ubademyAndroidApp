@@ -4,7 +4,7 @@ import {List} from 'react-native-paper';
 import {getSections} from '../api/CoursesApi';
 
 const SectionsView = ({route, navigation}) => {
-  const {id} = route.params;
+  const {id, userId} = route.params;
 
   const [state, setState] = React.useState({
     loading: false,
@@ -30,6 +30,7 @@ const SectionsView = ({route, navigation}) => {
                     navigation.navigate('Section View', {
                       courseId: item.courseId,
                       sectionId: item.id,
+                      userId: userId,
                     })
                   }
                 />

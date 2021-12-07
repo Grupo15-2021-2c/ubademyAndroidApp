@@ -12,7 +12,7 @@ import {Button} from 'react-native-paper';
 import {getSection} from '../api/CoursesApi';
 
 const SectionView = ({route, navigation}) => {
-  const {courseId, sectionId} = route.params;
+  const {courseId, sectionId, userId} = route.params;
 
   const [state, setState] = useState({
     loading: false,
@@ -26,7 +26,9 @@ const SectionView = ({route, navigation}) => {
     return (
       <Button
         mode="contained"
-        onPress={() => navigation.navigate(destiny, {courseId, sectionId})}>
+        onPress={() =>
+          navigation.navigate(destiny, {courseId, sectionId, userId})
+        }>
         <Text style={styles.buttonText}>{text}</Text>
       </Button>
     );

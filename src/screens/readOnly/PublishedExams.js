@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Button, List} from 'react-native-paper';
-import {getExams} from '../../api/examsApi';
+import {getExams, getPublishedExams} from '../../api/examsApi';
 import {CreatExam} from '../creat/CreatExam';
 
-export const MyCourseExams = ({route, navigation}) => {
-  const {courseId, sectionId} = route.params;
+export const PublishedExams = ({route, navigation}) => {
+  const {courseId, sectionId, userId} = route.params;
 
   const [state, setState] = React.useState({
     loading: true,
@@ -13,23 +13,8 @@ export const MyCourseExams = ({route, navigation}) => {
   });
 
   useEffect(() => {
-    getExams(courseId, sectionId, setState);
+    getPublishedExams(courseId, sectionId, setState);
   }, [courseId, sectionId]);
-
-  const GoToButton = ({text}) => {
-    return (
-      <Button
-        mode="contained"
-        onPress={() =>
-          navigation.navigate('CreatExam', {
-            courseId: courseId,
-            sectionId: sectionId,
-          })
-        }>
-        <Text style={styles.buttonText}>{text}</Text>
-      </Button>
-    );
-  };
 
   return (
     <View style={styles.root}>
@@ -44,8 +29,10 @@ export const MyCourseExams = ({route, navigation}) => {
                     titleStyle={styles.titleStyle}
                     style={styles.listItem}
                     onPress={() =>
-                      navigation.navigate('EditExam', {
-                        exam: item,
+                      navigation.navigate('StudentsExams', {
+                        courseId,
+                        sectionId,
+                        examId: item.id,
                       })
                     }
                   />
@@ -53,12 +40,6 @@ export const MyCourseExams = ({route, navigation}) => {
               })
             : null}
         </List.Section>
-
-        <View style={styles.options}>
-          <View style={styles.padding}>
-            <GoToButton navigation={navigation} text={'Add Exam'} />
-          </View>
-        </View>
       </ScrollView>
     </View>
   );

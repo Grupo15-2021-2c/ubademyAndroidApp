@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Button, List} from 'react-native-paper';
-import {getExams} from '../../api/examsApi';
+import {getExams, getStudentsExams} from '../../api/examsApi';
 import {CreatExam} from '../creat/CreatExam';
 
-export const MyCourseExams = ({route, navigation}) => {
-  const {courseId, sectionId} = route.params;
+export const StudentsExams = ({route, navigation}) => {
+  const {courseId, sectionId, examId} = route.params;
 
   const [state, setState] = React.useState({
     loading: true,
@@ -13,15 +13,15 @@ export const MyCourseExams = ({route, navigation}) => {
   });
 
   useEffect(() => {
-    getExams(courseId, sectionId, setState);
-  }, [courseId, sectionId]);
+    getStudentsExams(courseId, sectionId, examId, setState);
+  }, [courseId, examId, sectionId]);
 
-  const GoToButton = ({text}) => {
+  const GoToButton = ({destiny, text}) => {
     return (
       <Button
         mode="contained"
         onPress={() =>
-          navigation.navigate('CreatExam', {
+          navigation.navigate(CreatExam, {
             courseId: courseId,
             sectionId: sectionId,
           })
@@ -40,11 +40,14 @@ export const MyCourseExams = ({route, navigation}) => {
                 return (
                   <List.Item
                     key={item.id}
-                    title={item.title}
+                    title={item.userId}
                     titleStyle={styles.titleStyle}
                     style={styles.listItem}
                     onPress={() =>
-                      navigation.navigate('EditExam', {
+                      navigation.navigate('ScoreExam', {
+                        courseId,
+                        sectionId,
+                        examId,
                         exam: item,
                       })
                     }
@@ -53,12 +56,6 @@ export const MyCourseExams = ({route, navigation}) => {
               })
             : null}
         </List.Section>
-
-        <View style={styles.options}>
-          <View style={styles.padding}>
-            <GoToButton navigation={navigation} text={'Add Exam'} />
-          </View>
-        </View>
       </ScrollView>
     </View>
   );

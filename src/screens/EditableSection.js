@@ -73,10 +73,23 @@ export const EditableSection = ({route, navigation}) => {
                 mode="contained"
                 onPress={() =>
                   navigation.navigate('MyCourseExams', {
-                    sectionInfo: state.section,
+                    courseId: courseId,
+                    sectionId: sectionId,
                   })
                 }>
                 <Text style={styles.buttonText}>{'Edit exams'}</Text>
+              </Button>
+            </View>
+            <View style={styles.padding}>
+              <Button
+                mode="contained"
+                onPress={() =>
+                  navigation.navigate('PublishedExams', {
+                    courseId: courseId,
+                    sectionId: sectionId,
+                  })
+                }>
+                <Text style={styles.buttonText}>{'Review exams'}</Text>
               </Button>
             </View>
           </View>

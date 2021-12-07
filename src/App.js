@@ -44,6 +44,9 @@ import {Messages} from './screens/readOnly/Messages';
 import {Chat} from './screens/messages/Chat';
 import {CourseBySubscriptionType} from './screens/readOnly/CourseBySubscriptionType';
 import {CourseByCategory} from './screens/readOnly/CourseByCategory';
+import {StudentsExams} from './screens/readOnly/studentsExams';
+import {PublishedExams} from './screens/readOnly/PublishedExams';
+import {ScoreExam} from './screens/editable/ScoreExam';
 
 const Stack = createStackNavigator();
 
@@ -126,6 +129,33 @@ const App: () => Node = () => {
         <Stack.Screen
           name="CreatExam"
           component={CreatExam}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="StudentsExams"
+          component={StudentsExams}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="PublishedExams"
+          component={PublishedExams}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="ScoreExam"
+          component={ScoreExam}
           options={{
             presentation: 'modal',
             headerShown: false,

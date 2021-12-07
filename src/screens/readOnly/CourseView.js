@@ -17,11 +17,13 @@ import {
 } from '../../api/CoursesApi';
 import {categorys} from '../../Parameters/categorys';
 
-const GoToButton = ({navigation, destiny, text, courseId}) => {
+const GoToButton = ({navigation, destiny, text, courseId, userId}) => {
   return (
     <Button
       mode="contained"
-      onPress={() => navigation.navigate(destiny, {id: courseId})}>
+      onPress={() =>
+        navigation.navigate(destiny, {id: courseId, userId: userId})
+      }>
       <Text style={styles.buttonText}>{text}</Text>
     </Button>
   );
@@ -66,6 +68,7 @@ const CourseView = ({route, navigation}) => {
             text={'Sections'}
             destiny={'Sections View'}
             courseId={id}
+            userId={userId}
           />
         </View>
         <View style={styles.padding}>

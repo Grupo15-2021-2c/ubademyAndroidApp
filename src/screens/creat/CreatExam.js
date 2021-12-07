@@ -1,11 +1,14 @@
 import React, {useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Button, DefaultTheme, TextInput} from 'react-native-paper';
+import {createExam} from '../../api/examsApi';
 
 export const CreatExam = ({route, navigation}) => {
+  const {courseId, sectionId} = route.params;
+
   const [state, setState] = useState({
     title: '',
-    questions: [{questionNumber: 0, question: ''}],
+    questions: [{questionNumber: 0, text: ''}],
   });
 
   return (
@@ -36,7 +39,7 @@ export const CreatExam = ({route, navigation}) => {
                 onChangeText={textInput =>
                   setState(prevState => {
                     let modifiableState = Object.assign({}, prevState);
-                    modifiableState.questions[item.questionNumber].question =
+                    modifiableState.questions[item.questionNumber].text =
                       textInput;
                     return modifiableState;
                   })
@@ -62,7 +65,9 @@ export const CreatExam = ({route, navigation}) => {
         </Button>
       </View>
       <View style={styles.addButton}>
-        <Button mode="contained" onPress={() => console.log(state)}>
+        <Button
+          mode="contained"
+          onPress={() => createExam(courseId, sectionId, state)}>
           <Text style={styles.buttonText}>{'Upload'}</Text>
         </Button>
       </View>
