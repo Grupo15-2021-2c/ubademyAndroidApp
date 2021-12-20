@@ -31,16 +31,27 @@ export const googleLogin = async navigation => {
           console.log(data);
 
           let deviceToken = await messaging().getToken();
-          sendUserDeviceToken(data.data.id, deviceToken, data.data.firstName);
+          sendUserDeviceToken(
+            data.data.user.id,
+            deviceToken,
+            data.data.user.firstName,
+          );
 
           await AsyncStorage.setItem(
             '@ubademy:currentUserId',
-            data.data.id.toString(),
+            data.data.user.id.toString(),
           )
             .then()
             .then(() => console.log('@ubademy:currentUserId stored'));
 
-          navigation.navigate('Home', {userId: data.data.id});
+          await AsyncStorage.setItem(
+            '@ubademy:currentUserToken',
+            data.data.token,
+          )
+            .then()
+            .then(() => console.log('@ubademy:currentUserToken stored'));
+
+          navigation.navigate('Home', {userId: data.data.user.id});
         } else {
           showToast(data.message);
         }

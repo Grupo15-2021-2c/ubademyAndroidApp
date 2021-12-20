@@ -12,17 +12,18 @@ import {Button} from 'react-native-paper';
 import {
   EmailInput,
   SignInPasswordInput,
-} from '../components/TextInputComponents';
-import showToast from '../components/ToastUtilities';
-import processResponse from '../components/FetchUtilities';
-import {loginEndPoint} from '../Parameters/EndpointsUrls';
+} from '../../components/TextInputComponents';
+import showToast from '../../components/ToastUtilities';
+import processResponse from '../../components/FetchUtilities';
+import {loginEndPoint} from '../../Parameters/EndpointsUrls';
 import {
   GoogleSignin,
   GoogleSigninButton,
 } from '@react-native-community/google-signin';
-import {googleLogin} from '../api/login';
+import {googleLogin} from '../../api/login';
 import messaging from '@react-native-firebase/messaging';
-import {sendUserDeviceToken} from '../api/MessagingApi';
+import {sendUserDeviceToken} from '../../api/MessagingApi';
+import {getUserToken, loadedUserId} from '../../api/Storage';
 
 const postLogIn = (form, navigation, setError) => {
   console.log('[INFO] form: ' + JSON.stringify(form));
@@ -45,19 +46,25 @@ const postLogIn = (form, navigation, setError) => {
       );
 
       if (data.status === 'success') {
-        console.log(data.data);
-
         await AsyncStorage.setItem(
           '@ubademy:currentUserId',
-          data.data.id.toString(),
+          data.data.user.id.toString(),
         )
           .then()
           .then(() => console.log('@ubademy:currentUserId stored'));
 
-        let deviceToken = await messaging().getToken();
-        sendUserDeviceToken(data.data.id, deviceToken, data.data.firstName);
+        await AsyncStorage.setItem('@ubademy:currentUserToken', data.data.token)
+          .then()
+          .then(() => console.log('@ubademy:currentUserToken stored'));
 
-        navigation.navigate('Home', {userId: data.data.id});
+        let deviceToken = await messaging().getToken();
+        sendUserDeviceToken(
+          data.data.user.id,
+          deviceToken,
+          data.data.user.firstName,
+        );
+
+        navigation.navigate('Home', {userId: data.data.user.id});
         setError(false);
       } else {
         showToast(data.message);
@@ -81,7 +88,7 @@ const UbademyLogo = () => {
   return (
     <Image
       style={styles.logoStyle}
-      source={require('../resources/images/adaptive-icon.png')}
+      source={require('../../resources/images/adaptive-icon.png')}
     />
   );
 };
@@ -90,7 +97,7 @@ const BackgroundDetail = () => {
   return (
     <Image
       style={styles.backgroundDetailImageStyle}
-      source={require('../resources/images/background-detail.png')}
+      source={require('../../resources/images/background-detail.png')}
     />
   );
 };
@@ -104,7 +111,11 @@ const SignIn = ({navigation}) => {
       webClientId:
         '35307317074-0eaccllhnpi4qdguc6lna2tlahg6qacv.apps.googleusercontent.com',
     });
-  }, []);
+    let userId = loadedUserId;
+    if (userId.currentUserId !== '') {
+      navigation.navigate('Home', {userId: userId.currentUserId});
+    }
+  }, [navigation]);
 
   return (
     <View style={styles.root}>

@@ -6,3 +6,15 @@ export const currentUserId = setCurrentUser => {
     setCurrentUser({currentUserId: parseInt(jsonResponse)});
   });
 };
+
+export const loadedUserId = async () => {
+  let jsonString = await AsyncStorage.getItem('@ubademy:currentUserId');
+  const jsonResponse = jsonString === null ? '' : JSON.parse(jsonString);
+  return {currentUserId: parseInt(jsonResponse)};
+};
+
+export const getUserToken = async () => {
+  let jsonString = await AsyncStorage.getItem('@ubademy:currentUserToken');
+  const jsonResponse = jsonString === null ? '' : JSON.parse(jsonString);
+  return {token: jsonResponse};
+};

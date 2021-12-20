@@ -7,6 +7,7 @@ import {
 } from '../Parameters/EndpointsUrls';
 import processResponse from '../components/FetchUtilities';
 import showToast from '../components/ToastUtilities';
+import {getUserToken} from './Storage';
 
 export const getCourses = setState => {
   setState({loading: true});
@@ -110,6 +111,8 @@ export const getCourse = (id, setState) => {
 
 export const getMyCourses = (setState, userId) => {
   setState({loading: true});
+
+  let token = getUserToken();
 
   console.log('userId ' + userId);
 

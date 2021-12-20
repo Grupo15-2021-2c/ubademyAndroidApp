@@ -9,8 +9,8 @@
 import 'react-native-gesture-handler';
 import React, {useEffect} from 'react';
 import type {Node} from 'react';
-import SignIn from './screens/SignInScreen';
-import SignUp from './screens/SignUpScreen';
+import SignIn from './screens/logIn/SignInScreen';
+import SignUp from './screens/logIn/SignUpScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Home from './screens/HomeScreen';
@@ -49,7 +49,9 @@ import {PublishedExams} from './screens/readOnly/PublishedExams';
 import {ScoreExam} from './screens/editable/ScoreExam';
 import messaging from '@react-native-firebase/messaging';
 import showToast from './components/ToastUtilities';
-import {Alert} from 'react-native';
+import {Alert, Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {loadedUserId} from './api/Storage';
+import {Icon} from 'react-native-elements';
 
 const Stack = createStackNavigator();
 
@@ -81,11 +83,33 @@ const App: () => Node = () => {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{
-            presentation: 'modal',
-            headerShown: false,
-            cardOverlayEnabled: true,
-          }}
+          options={({navigation}) => ({
+            title: '',
+            headerStyle: {backgroundColor: '#A8DAFA'},
+            headerLeft: () => (
+              <Icon
+                name={'home'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  console.log('Already in home screen');
+                }}
+              />
+            ),
+            headerRight: () => (
+              <Icon
+                name={'account-circle'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('User Screen', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+          })}
         />
         <Stack.Screen
           name="My Courses"
@@ -397,5 +421,15 @@ const App: () => Node = () => {
     </NavigationContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  userInfo: {
+    flex: 1,
+    alignContent: 'center',
+    justifyContent: 'center',
+    width: '25%',
+    backgroundColor: 'red',
+  },
+});
 
 export default App;

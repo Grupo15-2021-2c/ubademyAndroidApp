@@ -8,14 +8,17 @@
 
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import {Button, TextInput} from 'react-native-paper';
+import {Button} from 'react-native-paper';
 
 const UbademyLogo = () => {
   return (
-    <Image
-      style={styles.logoStyle}
-      source={require('../resources/images/adaptive-icon.png')}
-    />
+    <View>
+      <Image
+        style={styles.logoStyle}
+        source={require('../resources/images/adaptive-icon.png')}
+      />
+      <Text style={styles.titleText}>{'Welcome back again to Ubademy!'}</Text>
+    </View>
   );
 };
 
@@ -38,13 +41,6 @@ const Home = ({route, navigation}) => {
         <UbademyLogo />
       </View>
       <View style={styles.options}>
-        <View style={styles.padding}>
-          <GoToButton
-            navigation={navigation}
-            text={'My profile'}
-            destiny={'User Screen'}
-          />
-        </View>
         <View style={styles.padding}>
           <GoToButton
             navigation={navigation}
@@ -89,6 +85,11 @@ const styles = StyleSheet.create({
   },
   padding: {
     margin: '2%',
+  },
+  titleText: {
+    fontSize: 30,
+    textAlign: 'center',
+    color: '#A8DAFA',
   },
   logoStyle: {
     resizeMode: 'contain',

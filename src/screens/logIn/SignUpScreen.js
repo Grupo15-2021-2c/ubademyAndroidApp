@@ -13,13 +13,13 @@ import {
   EmailInput,
   LastName,
   FirsName,
-} from '../components/TextInputComponents';
+} from '../../components/TextInputComponents';
 import {Button} from 'react-native-paper';
-import showToast from '../components/ToastUtilities';
-import processResponse from '../components/FetchUtilities';
-import {registerEndPoint} from '../Parameters/EndpointsUrls';
+import showToast from '../../components/ToastUtilities';
+import processResponse from '../../components/FetchUtilities';
+import {registerEndPoint} from '../../Parameters/EndpointsUrls';
 import {Icon} from 'react-native-elements';
-import {passwordRegex, validateEmail} from '../Parameters/Regex';
+import {passwordRegex, validateEmail} from '../../Parameters/Regex';
 
 const postRegister = (form, navigation, setError, setNameError) => {
   console.log('[INFO] form: ' + JSON.stringify(form));
@@ -69,7 +69,7 @@ const BackgroundDetail = () => {
   return (
     <Image
       style={styles.backgroundDetailImageStyle}
-      source={require('../resources/images/background-detail-sign-up.png')}
+      source={require('../../resources/images/background-detail-sign-up.png')}
     />
   );
 };
