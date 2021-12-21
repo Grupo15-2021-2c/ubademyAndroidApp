@@ -51,6 +51,9 @@ import showToast from './components/ToastUtilities';
 import {Alert} from 'react-native';
 import {loadedUserId} from './api/Storage';
 import {Icon} from 'react-native-elements';
+import {AppointCollaborators} from './screens/course/appointCollaborators';
+import {AddCollaborator} from './screens/course/addCollaborator';
+import {Mycollaborations} from './screens/course/myCollaborations';
 
 const Stack = createStackNavigator();
 
@@ -689,6 +692,58 @@ const App: () => Node = () => {
         <Stack.Screen
           name="Add image"
           component={AddImage}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="AddCollaborator"
+          component={AddCollaborator}
+          options={{
+            presentation: 'modal',
+            headerShown: false,
+            cardOverlayEnabled: true,
+          }}
+        />
+        <Stack.Screen
+          name="Mycollaborations"
+          component={Mycollaborations}
+          options={({navigation}) => ({
+            title: '',
+            headerStyle: {backgroundColor: '#A8DAFA'},
+            headerLeft: () => (
+              <Icon
+                name={'home'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('Home', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+            headerRight: () => (
+              <Icon
+                name={'account-circle'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('User Screen', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="AppointCollaborators"
+          component={AppointCollaborators}
           options={{
             presentation: 'modal',
             headerShown: false,

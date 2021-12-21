@@ -12,8 +12,14 @@ const CourseCreation = ({route, navigation}) => {
     description: false,
   });
   const [showDropDown, setShowDropDown] = useState(false);
+  const [showDropDown2, setShowDropDown2] = useState(false);
   const [categorys, setCategorys] = useState([]);
+  const [subscriptionsType, setSubscriptionsType] = useState([
+    {label: 'free', value: 0},
+    {label: 'premium', value: 1},
+  ]);
   const [category, setCategory] = useState(0);
+  const [subscriptionType, setSubscriptionType] = useState(0);
   const [loading, setLoading] = useState(true);
   const [course, setCourse] = useState({
     owner: userId,
@@ -59,6 +65,21 @@ const CourseCreation = ({route, navigation}) => {
               />
             </View>
             <View style={styles.padding}>
+              <DropDown
+                dropDownItemSelectedStyle={styles.blueBackground}
+                dropDownItemStyle={styles.blueBackground}
+                label={'SubscriptionType'}
+                mode={'flat'}
+                visible={showDropDown2}
+                onDismiss={() => setShowDropDown2(false)}
+                showDropDown={() => setShowDropDown2(true)}
+                value={subscriptionType}
+                setValue={setSubscriptionType}
+                list={subscriptionsType}
+                theme={textInputTheme}
+              />
+            </View>
+            <View style={styles.padding}>
               <TextInput
                 error={error.description}
                 multiline={true}
@@ -77,7 +98,14 @@ const CourseCreation = ({route, navigation}) => {
               <Button
                 mode="contained"
                 onPress={() => {
-                  creatCourse(course, category, setError, navigation, userId);
+                  creatCourse(
+                    course,
+                    category,
+                    setError,
+                    navigation,
+                    userId,
+                    subscriptionType,
+                  );
                 }}>
                 <Text style={styles.buttonText}>{'Create Course'}</Text>
               </Button>

@@ -55,6 +55,15 @@ const EditableCourse = ({route, navigation}) => {
               </Button>
             </View>
             <View style={styles.padding}>
+              <Button
+                mode="contained"
+                onPress={() =>
+                  navigation.navigate('AppointCollaborators', {courseId: id})
+                }>
+                <Text style={styles.buttonText}>{'Appoint collaborators'}</Text>
+              </Button>
+            </View>
+            <View style={styles.padding}>
               <GoToButton text={'View sections'} destiny={'Edit Sections'} />
             </View>
           </View>

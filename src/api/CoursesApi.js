@@ -179,8 +179,13 @@ export const creatCourse = async (
   setError,
   navigation,
   userId,
+  subscriptionsType,
 ) => {
-  let form = {...course, categoryId: category};
+  let form = {
+    ...course,
+    categoryId: category,
+    subscriptionsId: subscriptionsType,
+  };
   console.log('[INFO] form: ' + JSON.stringify(form));
 
   if (form.title === '') {

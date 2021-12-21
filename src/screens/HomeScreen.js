@@ -51,6 +51,13 @@ const Home = ({route, navigation}) => {
         <View style={styles.padding}>
           <GoToButton
             navigation={navigation}
+            text={'My Collaborations'}
+            destiny={'Mycollaborations'}
+          />
+        </View>
+        <View style={styles.padding}>
+          <GoToButton
+            navigation={navigation}
             text={'Courses'}
             destiny={'Courses'}
           />
