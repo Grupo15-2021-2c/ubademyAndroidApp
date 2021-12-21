@@ -7,15 +7,68 @@
  */
 
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {Icon} from 'react-native-elements';
+import {Image, StyleSheet, Text, View} from 'react-native';
+import {Button} from 'react-native-paper';
 
-const Home = ({navigation}) => {
+const UbademyLogo = () => {
+  return (
+    <View>
+      <Image
+        style={styles.logoStyle}
+        source={require('../resources/images/adaptive-icon.png')}
+      />
+      <Text style={styles.titleText}>{'Welcome back again to Ubademy!'}</Text>
+    </View>
+  );
+};
+
+const Home = ({route, navigation}) => {
+  const {userId} = route.params;
+
+  const GoToButton = ({destiny, text}) => {
+    return (
+      <Button
+        mode="contained"
+        onPress={() => navigation.navigate(destiny, {userId: userId})}>
+        <Text style={styles.buttonText}>{text}</Text>
+      </Button>
+    );
+  };
+
   return (
     <View style={styles.root}>
-      <View style={styles.top}>
-        <Text style={styles.titleTextStyle}>{'User is Logged In'}</Text>
-        <Icon name={'check-circle'} color={'#A8DAFA'} size={100} />
+      <View style={styles.header}>
+        <UbademyLogo />
+      </View>
+      <View style={styles.options}>
+        <View style={styles.padding}>
+          <GoToButton
+            navigation={navigation}
+            text={'My courses'}
+            destiny={'My Courses'}
+          />
+        </View>
+        <View style={styles.padding}>
+          <GoToButton
+            navigation={navigation}
+            text={'My Collaborations'}
+            destiny={'Mycollaborations'}
+          />
+        </View>
+        <View style={styles.padding}>
+          <GoToButton
+            navigation={navigation}
+            text={'Courses'}
+            destiny={'Courses'}
+          />
+        </View>
+        <View style={styles.padding}>
+          <GoToButton
+            navigation={navigation}
+            text={'Messages'}
+            destiny={'Messages'}
+          />
+        </View>
       </View>
     </View>
   );
@@ -26,16 +79,28 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#1d3557',
   },
-  top: {
+  options: {
+    flex: 2,
+    margin: '2%',
+    justifyContent: 'center',
+  },
+  header: {
     flex: 1,
+    margin: '5%',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  titleTextStyle: {
+  padding: {
+    margin: '2%',
+  },
+  titleText: {
     fontSize: 30,
-    color: '#A8DAFA',
     textAlign: 'center',
-    margin: '5%',
+    color: '#A8DAFA',
+  },
+  logoStyle: {
+    resizeMode: 'contain',
+    height: '100%',
   },
 });
 

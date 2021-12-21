@@ -6,16 +6,32 @@
  * @flow strict-local
  */
 
-import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {
+  Alert,
+  AsyncStorage,
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {Button} from 'react-native-paper';
 import {
   EmailInput,
   SignInPasswordInput,
-} from '../components/TextInputComponents';
-import showToast from '../components/ToastUtilities';
-import processResponse from '../components/FetchUtilities';
-import {loginEndPoint} from '../Parameters/EndpointsUrls';
+} from '../../components/TextInputComponents';
+import showToast from '../../components/ToastUtilities';
+import processResponse from '../../components/FetchUtilities';
+import {loginEndPoint} from '../../Parameters/EndpointsUrls';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+} from '@react-native-community/google-signin';
+import {googleLogin} from '../../api/login';
+import messaging from '@react-native-firebase/messaging';
+import {sendUserDeviceToken} from '../../api/MessagingApi';
+import {getUserToken, loadedUserId} from '../../api/Storage';
 
 const postLogIn = (form, navigation, setError) => {
   console.log('[INFO] form: ' + JSON.stringify(form));
@@ -30,15 +46,36 @@ const postLogIn = (form, navigation, setError) => {
     body: JSON.stringify(form),
   })
     .then(processResponse)
-    .then(res => {
+    .then(async res => {
       const {statusCode, data} = res;
 
-      console.log('[INFO] statusCode: ' + statusCode + ' data: ' + data);
+      console.log(
+        '[INFO] statusCode: ' + statusCode + ' data: ' + JSON.stringify(data),
+      );
 
-      if (data === true) {
-        navigation.navigate('Home');
+      if (data.status === 'success') {
+        await AsyncStorage.setItem(
+          '@ubademy:currentUserId',
+          data.data.user.id.toString(),
+        )
+          .then()
+          .then(() => console.log('@ubademy:currentUserId stored'));
+
+        await AsyncStorage.setItem('@ubademy:currentUserToken', data.data.token)
+          .then()
+          .then(() => console.log('@ubademy:currentUserToken stored'));
+
+        let deviceToken = await messaging().getToken();
+        sendUserDeviceToken(
+          data.data.user.id,
+          deviceToken,
+          data.data.user.firstName,
+        );
+
+        navigation.navigate('Home', {userId: data.data.user.id});
+        setError(false);
       } else {
-        showToast(data);
+        showToast(data.message);
         setError(true);
       }
     })
@@ -59,7 +96,7 @@ const UbademyLogo = () => {
   return (
     <Image
       style={styles.logoStyle}
-      source={require('../resources/images/adaptive-icon.png')}
+      source={require('../../resources/images/adaptive-icon.png')}
     />
   );
 };
@@ -68,7 +105,7 @@ const BackgroundDetail = () => {
   return (
     <Image
       style={styles.backgroundDetailImageStyle}
-      source={require('../resources/images/background-detail.png')}
+      source={require('../../resources/images/background-detail.png')}
     />
   );
 };
@@ -76,6 +113,23 @@ const BackgroundDetail = () => {
 const SignIn = ({navigation}) => {
   const [form, setForm] = React.useState({email: '', password: ''});
   const [error, setError] = React.useState(false);
+
+  useEffect(() => {
+    async function fetchUser() {
+      let userId = await loadedUserId();
+      console.log('userId ' + userId.currentUserId);
+      if (!isNaN(userId.currentUserId)) {
+        navigation.navigate('Home', {userId: userId.currentUserId});
+      }
+    }
+
+    fetchUser();
+
+    GoogleSignin.configure({
+      webClientId:
+        '35307317074-0eaccllhnpi4qdguc6lna2tlahg6qacv.apps.googleusercontent.com',
+    });
+  }, [navigation]);
 
   return (
     <View style={styles.root}>
@@ -111,6 +165,12 @@ const SignIn = ({navigation}) => {
             form={form}
             navigation={navigation}
             setError={setError}
+          />
+        </View>
+        <View style={styles.margin}>
+          <GoogleSigninButton
+            style={{width: Dimensions.get('window').width * 0.95}}
+            onPress={() => googleLogin(navigation)}
           />
         </View>
       </View>
