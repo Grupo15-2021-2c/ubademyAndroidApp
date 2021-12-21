@@ -67,7 +67,7 @@ export const CreatExam = ({route, navigation}) => {
       <View style={styles.addButton}>
         <Button
           mode="contained"
-          onPress={() => createExam(courseId, sectionId, state)}>
+          onPress={() => createExam(courseId, sectionId, state, navigation)}>
           <Text style={styles.buttonText}>{'Upload'}</Text>
         </Button>
       </View>

@@ -14,42 +14,41 @@ import SignUp from './screens/logIn/SignUpScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import Home from './screens/HomeScreen';
-import UserScreen from './screens/UserScreen';
-import MyCourses from './screens/MyCourses';
-import EditableCourse from './screens/EditableCourse';
-import Enrolled from './screens/Enrolled';
-import Courses from './screens/readOnly/Courses';
-import CourseView from './screens/readOnly/CourseView';
-import ListSections from './screens/ListSections';
-import EditSections from './screens/EditSections';
-import SectionsView from './screens/SectionsView';
-import SectionView from './screens/SectionView';
-import CourseCreation from './screens/creat/CourseCreationView';
-import {SectionCreation} from './screens/SectionCreationView';
-import {ViewResources} from './screens/ViewResourses';
-import {resourceView} from './screens/ResourceView';
-import {EditableSection} from './screens/EditableSection';
-import {EditableResources} from './screens/editable/EditResources';
-import {AddImage} from './screens/AddImageView';
-import {EditCourse} from './screens/editable/EditCourseView';
-import {EditSection} from './screens/editable/EditSectionView';
-import {EditUser} from './screens/editable/EditUserView';
-import {AddPdf} from './screens/creat/AddPdfView';
-import {MyCourseExams} from './screens/editable/myCourseExames';
-import {CreatExam} from './screens/creat/CreatExam';
-import {EditExam} from './screens/editable/EditExam';
+import UserScreen from './screens/user/UserScreen';
+import MyCourses from './screens/course/MyCourses';
+import EditableCourse from './screens/course/EditableCourse';
+import Enrolled from './screens/course/Enrolled';
+import Courses from './screens/course/Courses';
+import CourseView from './screens/course/CourseView';
+import EditSections from './screens/sections/EditSections';
+import SectionsView from './screens/sections/SectionsView';
+import SectionView from './screens/sections/SectionView';
+import CourseCreation from './screens/course/CourseCreationView';
+import {SectionCreation} from './screens/sections/SectionCreationView';
+import {ViewResources} from './screens/resources/ViewResourses';
+import {resourceView} from './screens/resources/ResourceView';
+import {EditableSection} from './screens/sections/EditableSection';
+import {EditableResources} from './screens/resources/EditResources';
+import {AddImage} from './screens/resources/AddImageView';
+import {EditCourse} from './screens/course/EditCourseView';
+import {EditSection} from './screens/sections/EditSectionView';
+import {EditUser} from './screens/user/EditUserView';
+import {AddPdf} from './screens/resources/AddPdfView';
+import {MyCourseExams} from './screens/exams/myCourseExames';
+import {CreatExam} from './screens/exams/CreatExam';
+import {EditExam} from './screens/exams/EditExam';
 import {AnswerExam} from './screens/exams/AnswerExam';
-import {ListExams} from './screens/readOnly/ListExams';
-import {Messages} from './screens/readOnly/Messages';
+import {ListExams} from './screens/exams/ListExams';
+import {Messages} from './screens/messages/Messages';
 import {Chat} from './screens/messages/Chat';
-import {CourseBySubscriptionType} from './screens/readOnly/CourseBySubscriptionType';
-import {CourseByCategory} from './screens/readOnly/CourseByCategory';
-import {StudentsExams} from './screens/readOnly/studentsExams';
-import {PublishedExams} from './screens/readOnly/PublishedExams';
-import {ScoreExam} from './screens/editable/ScoreExam';
+import {CourseBySubscriptionType} from './screens/course/CourseBySubscriptionType';
+import {CourseByCategory} from './screens/course/CourseByCategory';
+import {StudentsExams} from './screens/exams/studentsExams';
+import {PublishedExams} from './screens/exams/PublishedExams';
+import {ScoreExam} from './screens/exams/ScoreExam';
 import messaging from '@react-native-firebase/messaging';
 import showToast from './components/ToastUtilities';
-import {Alert, Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {Alert} from 'react-native';
 import {loadedUserId} from './api/Storage';
 import {Icon} from 'react-native-elements';
 
@@ -114,11 +113,36 @@ const App: () => Node = () => {
         <Stack.Screen
           name="My Courses"
           component={MyCourses}
-          options={{
-            presentation: 'modal',
-            headerShown: false,
-            cardOverlayEnabled: true,
-          }}
+          options={({navigation}) => ({
+            title: '',
+            headerStyle: {backgroundColor: '#A8DAFA'},
+            headerLeft: () => (
+              <Icon
+                name={'home'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('Home', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+            headerRight: () => (
+              <Icon
+                name={'account-circle'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('User Screen', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+          })}
         />
         <Stack.Screen
           name="Creat Course"
@@ -141,11 +165,36 @@ const App: () => Node = () => {
         <Stack.Screen
           name="CourseBySubscriptionType"
           component={CourseBySubscriptionType}
-          options={{
-            presentation: 'modal',
-            headerShown: false,
-            cardOverlayEnabled: true,
-          }}
+          options={({navigation}) => ({
+            title: '',
+            headerStyle: {backgroundColor: '#A8DAFA'},
+            headerLeft: () => (
+              <Icon
+                name={'home'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('Home', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+            headerRight: () => (
+              <Icon
+                name={'account-circle'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('User Screen', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+          })}
         />
         <Stack.Screen
           name="Chat"
@@ -159,11 +208,36 @@ const App: () => Node = () => {
         <Stack.Screen
           name="CourseByCategory"
           component={CourseByCategory}
-          options={{
-            presentation: 'modal',
-            headerShown: false,
-            cardOverlayEnabled: true,
-          }}
+          options={({navigation}) => ({
+            title: '',
+            headerStyle: {backgroundColor: '#A8DAFA'},
+            headerLeft: () => (
+              <Icon
+                name={'home'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('Home', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+            headerRight: () => (
+              <Icon
+                name={'account-circle'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('User Screen', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+          })}
         />
         <Stack.Screen
           name="CreatExam"
@@ -256,31 +330,72 @@ const App: () => Node = () => {
           }}
         />
         <Stack.Screen
-          name="List Sections"
-          component={ListSections}
-          options={{
-            presentation: 'modal',
-            headerShown: false,
-            cardOverlayEnabled: true,
-          }}
-        />
-        <Stack.Screen
           name="Edit Sections"
           component={EditSections}
-          options={{
-            presentation: 'modal',
-            headerShown: false,
-            cardOverlayEnabled: true,
-          }}
+          options={({navigation}) => ({
+            title: '',
+            headerStyle: {backgroundColor: '#A8DAFA'},
+            headerLeft: () => (
+              <Icon
+                name={'home'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('Home', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+            headerRight: () => (
+              <Icon
+                name={'account-circle'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('User Screen', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+          })}
         />
         <Stack.Screen
           name="Editable Course"
           component={EditableCourse}
-          options={{
-            presentation: 'modal',
-            headerShown: false,
-            cardOverlayEnabled: true,
-          }}
+          options={({navigation}) => ({
+            title: '',
+            headerStyle: {backgroundColor: '#A8DAFA'},
+            headerLeft: () => (
+              <Icon
+                name={'home'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('Home', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+            headerRight: () => (
+              <Icon
+                name={'account-circle'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('User Screen', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+          })}
         />
         <Stack.Screen
           name="View Resources"
@@ -303,47 +418,169 @@ const App: () => Node = () => {
         <Stack.Screen
           name="Enrolled"
           component={Enrolled}
-          options={{
-            presentation: 'modal',
-            headerShown: false,
-            cardOverlayEnabled: true,
-          }}
+          options={({navigation}) => ({
+            title: '',
+            headerStyle: {backgroundColor: '#A8DAFA'},
+            headerLeft: () => (
+              <Icon
+                name={'home'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('Home', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+            headerRight: () => (
+              <Icon
+                name={'account-circle'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('User Screen', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+          })}
         />
         <Stack.Screen
           name="User Screen"
           component={UserScreen}
-          options={{
-            presentation: 'modal',
-            headerShown: false,
-            cardOverlayEnabled: true,
-          }}
+          options={({navigation}) => ({
+            title: '',
+            headerStyle: {backgroundColor: '#A8DAFA'},
+            headerLeft: () => (
+              <Icon
+                name={'home'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('Home', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+            headerRight: () => (
+              <Icon
+                name={'account-circle'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  console.log('Already in user screen');
+                }}
+              />
+            ),
+          })}
         />
         <Stack.Screen
           name="Course View"
           component={CourseView}
-          options={{
-            presentation: 'modal',
-            headerShown: false,
-            cardOverlayEnabled: true,
-          }}
+          options={({navigation}) => ({
+            title: '',
+            headerStyle: {backgroundColor: '#A8DAFA'},
+            headerLeft: () => (
+              <Icon
+                name={'home'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('Home', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+            headerRight: () => (
+              <Icon
+                name={'account-circle'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('User Screen', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+          })}
         />
         <Stack.Screen
           name="Courses"
           component={Courses}
-          options={{
-            presentation: 'modal',
-            headerShown: false,
-            cardOverlayEnabled: true,
-          }}
+          options={({navigation}) => ({
+            title: '',
+            headerStyle: {backgroundColor: '#A8DAFA'},
+            headerLeft: () => (
+              <Icon
+                name={'home'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('Home', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+            headerRight: () => (
+              <Icon
+                name={'account-circle'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('User Screen', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+          })}
         />
         <Stack.Screen
           name="Editable section"
           component={EditableSection}
-          options={{
-            presentation: 'modal',
-            headerShown: false,
-            cardOverlayEnabled: true,
-          }}
+          options={({navigation}) => ({
+            title: '',
+            headerStyle: {backgroundColor: '#A8DAFA'},
+            headerLeft: () => (
+              <Icon
+                name={'home'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('Home', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+            headerRight: () => (
+              <Icon
+                name={'account-circle'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('User Screen', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+          })}
         />
         <Stack.Screen
           name="Edit User"
@@ -384,20 +621,70 @@ const App: () => Node = () => {
         <Stack.Screen
           name="Sections View"
           component={SectionsView}
-          options={{
-            presentation: 'modal',
-            headerShown: false,
-            cardOverlayEnabled: true,
-          }}
+          options={({navigation}) => ({
+            title: '',
+            headerStyle: {backgroundColor: '#A8DAFA'},
+            headerLeft: () => (
+              <Icon
+                name={'home'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('Home', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+            headerRight: () => (
+              <Icon
+                name={'account-circle'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('User Screen', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+          })}
         />
         <Stack.Screen
           name="Section View"
           component={SectionView}
-          options={{
-            presentation: 'modal',
-            headerShown: false,
-            cardOverlayEnabled: true,
-          }}
+          options={({navigation}) => ({
+            title: '',
+            headerStyle: {backgroundColor: '#A8DAFA'},
+            headerLeft: () => (
+              <Icon
+                name={'home'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('Home', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+            headerRight: () => (
+              <Icon
+                name={'account-circle'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('User Screen', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+          })}
         />
         <Stack.Screen
           name="Add image"
@@ -421,15 +708,5 @@ const App: () => Node = () => {
     </NavigationContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  userInfo: {
-    flex: 1,
-    alignContent: 'center',
-    justifyContent: 'center',
-    width: '25%',
-    backgroundColor: 'red',
-  },
-});
 
 export default App;

@@ -2,9 +2,9 @@ import React, {useEffect} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Button, List} from 'react-native-paper';
 import {getExams, getPublishedExams} from '../../api/examsApi';
-import {CreatExam} from '../creat/CreatExam';
+import {CreatExam} from './CreatExam';
 
-export const ListExams = ({route, navigation}) => {
+export const PublishedExams = ({route, navigation}) => {
   const {courseId, sectionId, userId} = route.params;
 
   const [state, setState] = React.useState({
@@ -13,23 +13,8 @@ export const ListExams = ({route, navigation}) => {
   });
 
   useEffect(() => {
-    getPublishedExams(courseId, sectionId, setState);
-  }, [courseId, sectionId]);
-
-  const GoToButton = ({destiny, text}) => {
-    return (
-      <Button
-        mode="contained"
-        onPress={() =>
-          navigation.navigate(CreatExam, {
-            courseId: courseId,
-            sectionId: sectionId,
-          })
-        }>
-        <Text style={styles.buttonText}>{text}</Text>
-      </Button>
-    );
-  };
+    getPublishedExams(courseId, sectionId, setState, navigation);
+  }, [courseId, navigation, sectionId]);
 
   return (
     <View style={styles.root}>
@@ -44,9 +29,10 @@ export const ListExams = ({route, navigation}) => {
                     titleStyle={styles.titleStyle}
                     style={styles.listItem}
                     onPress={() =>
-                      navigation.navigate('AnswerExam', {
-                        exam: item,
-                        userId,
+                      navigation.navigate('StudentsExams', {
+                        courseId,
+                        sectionId,
+                        examId: item.id,
                       })
                     }
                   />

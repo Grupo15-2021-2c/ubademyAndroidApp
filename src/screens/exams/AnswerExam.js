@@ -31,11 +31,11 @@ export const AnswerExam = ({route, navigation}) => {
         });
       }
 
-      getUserAnswer(modifiableState, currentUser, setAnswer);
+      getUserAnswer(modifiableState, currentUser, setAnswer, navigation);
 
       return modifiableState;
     });
-  }, [currentUser]);
+  }, [currentUser, navigation]);
 
   const showExam = () => {
     if (answer.answers === null) {
@@ -97,11 +97,11 @@ export const AnswerExam = ({route, navigation}) => {
           })}
         </ScrollView>
         {answer.answers.score !== null ? (
-          <Text style={styles.titleText}>
+          <Text style={styles.score}>
             {'Your result is ' + answer.answers.score}
           </Text>
         ) : (
-          <Text style={styles.titleText}>
+          <Text style={styles.score}>
             {'Your exam has not been reviewed yet.'}
           </Text>
         )}
@@ -120,6 +120,13 @@ const styles = StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: '#1d3557',
+  },
+  score: {
+    marginBottom: '20%',
+    margin: '1%',
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#A8DAFA',
   },
   container: {
     flex: 1,

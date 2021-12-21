@@ -1,8 +1,8 @@
 import React, {useEffect, useState, useCallback, useLayoutEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {DefaultTheme} from 'react-native-paper';
+import {DefaultTheme, TextInput} from 'react-native-paper';
 import {getChat, sendMessageApi} from '../../api/MessagingApi';
-import {GiftedChat} from 'react-native-gifted-chat';
+import {GiftedChat, InputToolbar} from 'react-native-gifted-chat';
 import messaging from '@react-native-firebase/messaging';
 
 export const Chat = ({route, navigation}) => {
@@ -82,6 +82,7 @@ export const Chat = ({route, navigation}) => {
           _id: state.originId,
         }}
         scrollToBottom={true}
+        textInputProps={{color: '#1d3557'}}
       />
     </View>
   );
@@ -131,10 +132,9 @@ const textInputTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    text: '#A8DAFA',
+    text: '#1d3557',
     primary: '#A8DAFA',
     placeholder: '#A8DAFA',
-    background: 'transparent',
     disabled: '#A8DAFA',
     error: '#e63946',
   },

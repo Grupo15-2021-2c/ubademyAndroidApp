@@ -1,8 +1,12 @@
 import {coursesEndPoint} from '../Parameters/EndpointsUrls';
 import processResponse from '../components/FetchUtilities';
 import showToast from '../components/ToastUtilities';
+import {getUserToken, loadedUserId} from './Storage';
+import {logOutUser} from './UsersApi';
 
-export const getExams = (courseId, sectionId, setState) => {
+export const getExams = async (courseId, sectionId, setState, navigation) => {
+  let user = await getUserToken();
+
   setState(prevState => {
     let modifiableState = Object.assign({}, prevState);
     modifiableState.loading = true;
@@ -20,6 +24,7 @@ export const getExams = (courseId, sectionId, setState) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
   })
     .then(processResponse)
@@ -33,16 +38,22 @@ export const getExams = (courseId, sectionId, setState) => {
           loading: false,
           resources: data.data,
         });
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.error(error.message));
 };
 
-export const createExam = (courseId, sectionId, state) => {
+export const createExam = async (courseId, sectionId, state, navigation) => {
+  let user = await getUserToken();
   let uri =
     coursesEndPoint + '/' + courseId + '/sections/' + sectionId + '/' + 'exams';
 
   console.log(uri);
+
+  console.log({state});
+  console.log(state.questions);
 
   fetch(uri, {
     method: 'post',
@@ -50,6 +61,7 @@ export const createExam = (courseId, sectionId, state) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
     body: JSON.stringify(state),
   })
@@ -60,13 +72,15 @@ export const createExam = (courseId, sectionId, state) => {
       console.log(data);
 
       if (statusCode === 200) {
-        console.log('Creado');
+        navigation.goBack();
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.error(error.message));
 };
 
-export const updateExam = (exam, navigation) => {
+export const updateExam = async (exam, navigation) => {
   let uri =
     coursesEndPoint +
     '/' +
@@ -76,6 +90,8 @@ export const updateExam = (exam, navigation) => {
     '/exams/' +
     exam.id;
 
+  let user = await getUserToken();
+
   console.log(uri);
 
   fetch(uri, {
@@ -84,6 +100,7 @@ export const updateExam = (exam, navigation) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
     body: JSON.stringify(exam.questions),
   })
@@ -96,12 +113,14 @@ export const updateExam = (exam, navigation) => {
       if (statusCode === 200) {
         showToast('Exam updated!');
         navigation.goBack();
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.error(error.message));
 };
 
-export const publishExam = (exam, navigation) => {
+export const publishExam = async (exam, navigation) => {
   let uri =
     coursesEndPoint +
     '/' +
@@ -114,12 +133,15 @@ export const publishExam = (exam, navigation) => {
 
   console.log(uri);
 
+  let user = await getUserToken();
+
   fetch(uri, {
     method: 'patch',
     mode: 'no-cors',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
     body: JSON.stringify(exam.questions),
   })
@@ -132,12 +154,14 @@ export const publishExam = (exam, navigation) => {
       if (statusCode === 200) {
         showToast('Exam published!');
         navigation.goBack();
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.error(error.message));
 };
 
-export const answerExam = (state, userId, navigation) => {
+export const answerExam = async (state, userId, navigation) => {
   let uri =
     coursesEndPoint +
     '/' +
@@ -147,6 +171,8 @@ export const answerExam = (state, userId, navigation) => {
     '/exams/' +
     state.exam.id +
     '/resolutions';
+
+  let user = await getUserToken();
 
   console.log(uri);
 
@@ -164,6 +190,7 @@ export const answerExam = (state, userId, navigation) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
     body: JSON.stringify(form),
   })
@@ -176,12 +203,14 @@ export const answerExam = (state, userId, navigation) => {
       if (statusCode === 200) {
         showToast('Exam published!');
         navigation.goBack();
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.error(error.message));
 };
 
-export const getUserAnswer = (state, userId, setAnswer) => {
+export const getUserAnswer = async (state, userId, setAnswer, navigation) => {
   let uri =
     coursesEndPoint +
     '/' +
@@ -194,12 +223,15 @@ export const getUserAnswer = (state, userId, setAnswer) => {
 
   console.log(uri);
 
+  let user = await getUserToken();
+
   fetch(uri, {
     method: 'get',
     mode: 'no-cors',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
   })
     .then(processResponse)
@@ -216,12 +248,21 @@ export const getUserAnswer = (state, userId, setAnswer) => {
           }
         }
         setAnswer({loading: false, answers: null});
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.error(error.message));
 };
 
-export const getPublishedExams = (courseId, sectionId, setState) => {
+export const getPublishedExams = async (
+  courseId,
+  sectionId,
+  setState,
+  navigation,
+) => {
+  let user = await getUserToken();
+
   setState(prevState => {
     let modifiableState = Object.assign({}, prevState);
     modifiableState.loading = true;
@@ -239,6 +280,7 @@ export const getPublishedExams = (courseId, sectionId, setState) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
   })
     .then(processResponse)
@@ -260,12 +302,20 @@ export const getPublishedExams = (courseId, sectionId, setState) => {
           loading: false,
           resources: exams,
         });
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.error(error.message));
 };
 
-export const getStudentsExams = (courseId, sectionId, examId, setState) => {
+export const getStudentsExams = async (
+  courseId,
+  sectionId,
+  examId,
+  setState,
+  navigation,
+) => {
   setState(prevState => {
     let modifiableState = Object.assign({}, prevState);
     modifiableState.loading = true;
@@ -286,12 +336,15 @@ export const getStudentsExams = (courseId, sectionId, examId, setState) => {
 
   console.log(uri);
 
+  let user = await getUserToken();
+
   fetch(uri, {
     method: 'get',
     mode: 'no-cors',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
   })
     .then(processResponse)
@@ -305,17 +358,27 @@ export const getStudentsExams = (courseId, sectionId, examId, setState) => {
           loading: false,
           resources: data.data,
         });
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.error(error.message));
 };
 
-export const getExam = (courseId, sectionId, examId, setState) => {
+export const getExam = async (
+  courseId,
+  sectionId,
+  examId,
+  setState,
+  navigation,
+) => {
   setState(prevState => {
     let modifiableState = Object.assign({}, prevState);
     modifiableState.loading = true;
     return modifiableState;
   });
+
+  let user = await getUserToken();
 
   let uri =
     coursesEndPoint +
@@ -334,6 +397,7 @@ export const getExam = (courseId, sectionId, examId, setState) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
   })
     .then(processResponse)
@@ -349,12 +413,14 @@ export const getExam = (courseId, sectionId, examId, setState) => {
           modifiableState.loading = false;
           return modifiableState;
         });
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.error(error.message));
 };
 
-export const scoreExam = (
+export const scoreExam = async (
   courseId,
   sectionId,
   examId,
@@ -362,6 +428,13 @@ export const scoreExam = (
   score,
   navigation,
 ) => {
+  if (score > 10 || score < 0) {
+    showToast('Score is note between 0 and 10');
+    return;
+  }
+
+  let user = await getUserToken();
+
   let uri =
     coursesEndPoint +
     '/' +
@@ -376,7 +449,9 @@ export const scoreExam = (
 
   console.log(uri);
 
-  let form = {score: score};
+  let id = await loadedUserId();
+
+  let form = {score: score, scorerId: id.currentUserId};
 
   console.log(form);
 
@@ -386,6 +461,7 @@ export const scoreExam = (
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
     body: JSON.stringify(form),
   })
@@ -398,6 +474,8 @@ export const scoreExam = (
       if (statusCode === 200) {
         showToast('Exam scored!');
         navigation.goBack();
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.error(error.message));

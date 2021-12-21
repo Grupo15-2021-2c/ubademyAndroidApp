@@ -15,6 +15,7 @@ export const loadedUserId = async () => {
 
 export const getUserToken = async () => {
   let jsonString = await AsyncStorage.getItem('@ubademy:currentUserToken');
-  const jsonResponse = jsonString === null ? '' : JSON.parse(jsonString);
+  console.log(jsonString);
+  const jsonResponse = jsonString === null ? '' : jsonString;
   return {token: jsonResponse};
 };

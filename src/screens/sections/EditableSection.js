@@ -9,10 +9,10 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-paper';
-import {getSection} from '../api/CoursesApi';
+import {getSection} from '../../api/CoursesApi';
 
-const SectionView = ({route, navigation}) => {
-  const {courseId, sectionId, userId} = route.params;
+export const EditableSection = ({route, navigation}) => {
+  const {courseId, sectionId} = route.params;
 
   const [state, setState] = useState({
     loading: false,
@@ -27,7 +27,10 @@ const SectionView = ({route, navigation}) => {
       <Button
         mode="contained"
         onPress={() =>
-          navigation.navigate(destiny, {courseId, sectionId, userId})
+          navigation.navigate(destiny, {
+            courseId: courseId,
+            sectionId: sectionId,
+          })
         }>
         <Text style={styles.buttonText}>{text}</Text>
       </Button>
@@ -35,8 +38,8 @@ const SectionView = ({route, navigation}) => {
   };
 
   useEffect(() => {
-    getSection(courseId, sectionId, setState);
-  }, [courseId, sectionId]);
+    getSection(courseId, sectionId, setState, navigation);
+  }, [courseId, navigation, sectionId]);
 
   const renderInfo = () => {
     if (!state.loading) {
@@ -51,17 +54,43 @@ const SectionView = ({route, navigation}) => {
               <GoToButton
                 navigation={navigation}
                 text={'Resources'}
-                destiny={'View Resources'}
-                courseId={courseId}
+                destiny={'Editable resources'}
               />
             </View>
             <View style={styles.padding}>
-              <GoToButton
-                navigation={navigation}
-                text={'Exams'}
-                destiny={'ListExams'}
-                courseId={courseId}
-              />
+              <Button
+                mode="contained"
+                onPress={() =>
+                  navigation.navigate('Edit section', {
+                    sectionInfo: state.section,
+                  })
+                }>
+                <Text style={styles.buttonText}>{'Edit section'}</Text>
+              </Button>
+            </View>
+            <View style={styles.padding}>
+              <Button
+                mode="contained"
+                onPress={() =>
+                  navigation.navigate('MyCourseExams', {
+                    courseId: courseId,
+                    sectionId: sectionId,
+                  })
+                }>
+                <Text style={styles.buttonText}>{'Edit exams'}</Text>
+              </Button>
+            </View>
+            <View style={styles.padding}>
+              <Button
+                mode="contained"
+                onPress={() =>
+                  navigation.navigate('PublishedExams', {
+                    courseId: courseId,
+                    sectionId: sectionId,
+                  })
+                }>
+                <Text style={styles.buttonText}>{'Review exams'}</Text>
+              </Button>
             </View>
           </View>
         </View>
@@ -96,6 +125,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#A8DAFA',
     marginTop: '3%',
+    marginRight: '3%',
+    marginLeft: '3%',
   },
   buttonText: {
     fontSize: 18,
@@ -111,5 +142,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-export default SectionView;

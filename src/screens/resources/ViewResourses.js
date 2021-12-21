@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {List} from 'react-native-paper';
-import {getResources} from '../api/CoursesApi';
+import {getResources} from '../../api/CoursesApi';
 
 export const ViewResources = ({route, navigation}) => {
   const {courseId, sectionId} = route.params;
@@ -12,8 +12,8 @@ export const ViewResources = ({route, navigation}) => {
   });
 
   useEffect(() => {
-    getResources(courseId, sectionId, setState);
-  }, [courseId, sectionId]);
+    getResources(courseId, sectionId, setState, navigation);
+  }, [courseId, navigation, sectionId]);
 
   return (
     <ScrollView style={styles.root}>

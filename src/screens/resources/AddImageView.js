@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import CurryImagePicker from '../components/CurryImagePicker';
+import CurryImagePicker from '../../components/CurryImagePicker';
 import {Button} from 'react-native-paper';
-import {uploadImage} from '../api/CoursesApi';
+import {uploadImage} from '../../api/CoursesApi';
 
 export const AddImage = ({route, navigation}) => {
   const {courseId, sectionId} = route.params;

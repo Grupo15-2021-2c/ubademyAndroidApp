@@ -28,8 +28,8 @@ export const ScoreExam = ({route, navigation}) => {
       return modifiableState;
     });
 
-    getExam(courseId, sectionId, examId, setState);
-  }, [courseId, sectionId, examId]);
+    getExam(courseId, sectionId, examId, setState, navigation);
+  }, [courseId, sectionId, examId, navigation]);
 
   return (
     <View style={styles.root}>
@@ -51,7 +51,7 @@ export const ScoreExam = ({route, navigation}) => {
           <View style={styles.addButton}>
             <TextInput
               keyboardType={'numeric'}
-              maxLength={1}
+              maxLength={2}
               multiline={false}
               label={'Score'}
               value={state.answers.score}

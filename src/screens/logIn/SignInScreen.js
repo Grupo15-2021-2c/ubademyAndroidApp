@@ -7,7 +7,15 @@
  */
 
 import React, {useEffect} from 'react';
-import {Alert, AsyncStorage, Image, StyleSheet, Text, View} from 'react-native';
+import {
+  Alert,
+  AsyncStorage,
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {Button} from 'react-native-paper';
 import {
   EmailInput,
@@ -107,14 +115,20 @@ const SignIn = ({navigation}) => {
   const [error, setError] = React.useState(false);
 
   useEffect(() => {
+    async function fetchUser() {
+      let userId = await loadedUserId();
+      console.log('userId ' + userId.currentUserId);
+      if (!isNaN(userId.currentUserId)) {
+        navigation.navigate('Home', {userId: userId.currentUserId});
+      }
+    }
+
+    fetchUser();
+
     GoogleSignin.configure({
       webClientId:
         '35307317074-0eaccllhnpi4qdguc6lna2tlahg6qacv.apps.googleusercontent.com',
     });
-    let userId = loadedUserId;
-    if (userId.currentUserId !== '') {
-      navigation.navigate('Home', {userId: userId.currentUserId});
-    }
   }, [navigation]);
 
   return (
@@ -154,7 +168,10 @@ const SignIn = ({navigation}) => {
           />
         </View>
         <View style={styles.margin}>
-          <GoogleSigninButton onPress={() => googleLogin(navigation)} />
+          <GoogleSigninButton
+            style={{width: Dimensions.get('window').width * 0.95}}
+            onPress={() => googleLogin(navigation)}
+          />
         </View>
       </View>
       <Text style={styles.bottom}>

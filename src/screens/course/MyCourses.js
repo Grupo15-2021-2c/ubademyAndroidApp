@@ -1,46 +1,43 @@
 import React, {useEffect} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Button, List} from 'react-native-paper';
-import {getSections} from '../api/CoursesApi';
+import {getMyCourses} from '../../api/CoursesApi';
 
-const EditSections = ({route, navigation}) => {
-  const {courseId} = route.params;
-
-  const [state, setState] = React.useState({
-    loading: false,
-    sections: [],
-  });
-
-  useEffect(() => {
-    getSections(courseId, setState);
-  }, [courseId]);
+const MyCourses = ({route, navigation}) => {
+  const {userId} = route.params;
 
   const GoToButton = ({destiny, text}) => {
     return (
       <Button
         mode="contained"
-        onPress={() => navigation.navigate(destiny, {courseId: courseId})}>
+        onPress={() => navigation.navigate(destiny, {userId: userId})}>
         <Text style={styles.buttonText}>{text}</Text>
       </Button>
     );
   };
 
+  const [state, setState] = React.useState({
+    loading: false,
+    courses: [],
+  });
+
+  useEffect(() => {
+    getMyCourses(setState, userId, navigation);
+  }, [navigation, userId]);
+
   return (
-    <View style={styles.root}>
+    <ScrollView style={styles.root}>
       <List.Section>
         {!state.loading
-          ? state.sections.map(item => {
+          ? state.courses.map(item => {
               return (
                 <List.Item
                   key={item.id}
-                  title={item.subtitle}
+                  title={item.title}
                   titleStyle={styles.titleStyle}
                   style={styles.listItem}
                   onPress={() =>
-                    navigation.navigate('Editable section', {
-                      courseId: courseId,
-                      sectionId: item.id,
-                    })
+                    navigation.navigate('Editable Course', {id: item.id})
                   }
                 />
               );
@@ -50,11 +47,11 @@ const EditSections = ({route, navigation}) => {
       <View style={styles.addButton}>
         <GoToButton
           navigation={navigation}
-          text={'Add Section'}
-          destiny={'Creat Section'}
+          text={'Add Course'}
+          destiny={'Creat Course'}
         />
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -80,4 +77,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EditSections;
+export default MyCourses;

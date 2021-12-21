@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Button, List} from 'react-native-paper';
-import {getExams, getPublishedExams} from '../../api/examsApi';
-import {CreatExam} from '../creat/CreatExam';
+import {getExams, getStudentsExams} from '../../api/examsApi';
+import {CreatExam} from './CreatExam';
 
-export const PublishedExams = ({route, navigation}) => {
-  const {courseId, sectionId, userId} = route.params;
+export const StudentsExams = ({route, navigation}) => {
+  const {courseId, sectionId, examId} = route.params;
 
   const [state, setState] = React.useState({
     loading: true,
@@ -13,8 +13,23 @@ export const PublishedExams = ({route, navigation}) => {
   });
 
   useEffect(() => {
-    getPublishedExams(courseId, sectionId, setState);
-  }, [courseId, sectionId]);
+    getStudentsExams(courseId, sectionId, examId, setState, navigation);
+  }, [courseId, examId, navigation, sectionId]);
+
+  const GoToButton = ({destiny, text}) => {
+    return (
+      <Button
+        mode="contained"
+        onPress={() =>
+          navigation.navigate(CreatExam, {
+            courseId: courseId,
+            sectionId: sectionId,
+          })
+        }>
+        <Text style={styles.buttonText}>{text}</Text>
+      </Button>
+    );
+  };
 
   return (
     <View style={styles.root}>
@@ -25,14 +40,15 @@ export const PublishedExams = ({route, navigation}) => {
                 return (
                   <List.Item
                     key={item.id}
-                    title={item.title}
+                    title={item.userId}
                     titleStyle={styles.titleStyle}
                     style={styles.listItem}
                     onPress={() =>
-                      navigation.navigate('StudentsExams', {
+                      navigation.navigate('ScoreExam', {
                         courseId,
                         sectionId,
-                        examId: item.id,
+                        examId,
+                        exam: item,
                       })
                     }
                   />

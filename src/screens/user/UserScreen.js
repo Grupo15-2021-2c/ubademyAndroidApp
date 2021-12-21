@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {getUserInfo} from '../api/UsersApi';
-import {currentUserId} from '../api/Storage';
+import {AsyncStorage, StyleSheet, Text, View} from 'react-native';
+import {getUserInfo} from '../../api/UsersApi';
+import {currentUserId} from '../../api/Storage';
 import {Button} from 'react-native-paper';
 
 const UserScreen = ({route, navigation}) => {
@@ -19,8 +19,8 @@ const UserScreen = ({route, navigation}) => {
 
   useEffect(() => {
     currentUserId(setCurrentUser);
-    getUserInfo(userId, setState);
-  }, [userId]);
+    getUserInfo(userId, setState, navigation);
+  }, [navigation, userId]);
 
   return (
     <View style={styles.root}>
@@ -36,13 +36,32 @@ const UserScreen = ({route, navigation}) => {
       ) : null}
       {currentUser.currentUserId === userId ? (
         <View style={styles.editButton}>
-          <Button
-            mode="contained"
-            onPress={() =>
-              navigation.navigate('Edit User', {user: state.user})
-            }>
-            <Text style={styles.buttonText}>{'Edit'}</Text>
-          </Button>
+          <View style={styles.padding}>
+            <Button
+              mode="contained"
+              onPress={() =>
+                navigation.navigate('Edit User', {user: state.user})
+              }>
+              <Text style={styles.buttonText}>{'Edit'}</Text>
+            </Button>
+          </View>
+          <View style={styles.padding}>
+            <Button
+              mode="contained"
+              onPress={async () => {
+                await AsyncStorage.setItem('@ubademy:currentUserId', '')
+                  .then()
+                  .then(() => console.log('@ubademy:currentUserId stored'));
+
+                await AsyncStorage.setItem('@ubademy:currentUserToken', '')
+                  .then()
+                  .then(() => console.log('@ubademy:currentUserToken stored'));
+
+                navigation.navigate('Sign In');
+              }}>
+              <Text style={styles.buttonText}>{'Log out'}</Text>
+            </Button>
+          </View>
         </View>
       ) : (
         <View style={styles.editButton}>
@@ -51,7 +70,7 @@ const UserScreen = ({route, navigation}) => {
             onPress={() =>
               navigation.navigate('Chat', {
                 userId: currentUser.currentUserId,
-                destination_id: state.user,
+                destination_id: userId,
               })
             }>
             <Text style={styles.buttonText}>{'Send message'}</Text>
@@ -69,8 +88,8 @@ const styles = StyleSheet.create({
   },
   editButton: {
     flex: 1,
-    margin: '5%',
     justifyContent: 'flex-end',
+    margin: '5%',
   },
   userImage: {
     flex: 10,
@@ -87,8 +106,7 @@ const styles = StyleSheet.create({
     margin: '5%',
   },
   padding: {
-    flex: 0.25,
-    backgroundColor: '#A8DAFA',
+    margin: '2%',
   },
   nameTextStyle: {
     fontSize: 32,

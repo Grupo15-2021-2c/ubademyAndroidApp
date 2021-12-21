@@ -1,9 +1,10 @@
 import React, {useEffect} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {Button, List} from 'react-native-paper';
-import {getResources} from '../../api/CoursesApi';
+import {getExams} from '../../api/examsApi';
+import {CreatExam} from './CreatExam';
 
-export const EditableResources = ({route, navigation}) => {
+export const MyCourseExams = ({route, navigation}) => {
   const {courseId, sectionId} = route.params;
 
   const [state, setState] = React.useState({
@@ -12,15 +13,15 @@ export const EditableResources = ({route, navigation}) => {
   });
 
   useEffect(() => {
-    getResources(courseId, sectionId, setState);
-  }, [courseId, sectionId]);
+    getExams(courseId, sectionId, setState, navigation);
+  }, [courseId, navigation, sectionId]);
 
-  const GoToButton = ({destiny, text}) => {
+  const GoToButton = ({text}) => {
     return (
       <Button
         mode="contained"
         onPress={() =>
-          navigation.navigate(destiny, {
+          navigation.navigate('CreatExam', {
             courseId: courseId,
             sectionId: sectionId,
           })
@@ -39,14 +40,12 @@ export const EditableResources = ({route, navigation}) => {
                 return (
                   <List.Item
                     key={item.id}
-                    title={item.name}
+                    title={item.title}
                     titleStyle={styles.titleStyle}
-                    description={item.type}
-                    descriptionStyle={styles.descriptionStyle}
                     style={styles.listItem}
                     onPress={() =>
-                      navigation.navigate('Resource view', {
-                        resource: item,
+                      navigation.navigate('EditExam', {
+                        exam: item,
                       })
                     }
                   />
@@ -57,18 +56,7 @@ export const EditableResources = ({route, navigation}) => {
 
         <View style={styles.options}>
           <View style={styles.padding}>
-            <GoToButton
-              navigation={navigation}
-              text={'Add Image'}
-              destiny={'Add image'}
-            />
-          </View>
-          <View style={styles.padding}>
-            <GoToButton
-              navigation={navigation}
-              text={'Add PDF'}
-              destiny={'Add Pdf'}
-            />
+            <GoToButton navigation={navigation} text={'Add Exam'} />
           </View>
         </View>
       </ScrollView>

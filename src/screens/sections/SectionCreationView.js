@@ -9,7 +9,7 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Button, DefaultTheme, TextInput} from 'react-native-paper';
-import {creatSection} from '../api/CoursesApi';
+import {creatSection} from '../../api/CoursesApi';
 
 export const SectionCreation = ({route, navigation}) => {
   const {courseId} = route.params;

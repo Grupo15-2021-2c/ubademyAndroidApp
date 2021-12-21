@@ -18,8 +18,8 @@ export const CourseByCategory = ({route, navigation}) => {
   });
 
   useEffect(() => {
-    getCategories(setCategorys, setLoading);
-  }, []);
+    getCategories(setCategorys, setLoading, navigation);
+  }, [navigation]);
 
   return (
     <View style={styles.root}>
@@ -36,7 +36,7 @@ export const CourseByCategory = ({route, navigation}) => {
             value={category}
             setValue={categoryId => {
               setCategory(categoryId);
-              getCoursesCategory(categoryId, setState);
+              getCoursesCategory(categoryId, setState, navigation);
             }}
             list={categorys}
             theme={textInputTheme}

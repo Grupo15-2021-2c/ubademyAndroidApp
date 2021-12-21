@@ -8,34 +8,12 @@ import {
 import processResponse from '../components/FetchUtilities';
 import showToast from '../components/ToastUtilities';
 import {getUserToken} from './Storage';
+import {logOutUser} from './UsersApi';
 
-export const getCourses = setState => {
+export const getSections = async (courseId, setState, navigation) => {
   setState({loading: true});
 
-  fetch(coursesEndPoint, {
-    method: 'get',
-    mode: 'no-cors',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-  })
-    .then(processResponse)
-    .then(res => {
-      const {statusCode, data} = res;
-
-      if (statusCode === 200) {
-        setState({
-          loading: false,
-          courses: data.data,
-        });
-      }
-    })
-    .catch(error => console.log('[ERROR] ' + error.message));
-};
-
-export const getSections = (courseId, setState) => {
-  setState({loading: true});
+  let user = await getUserToken();
 
   fetch(coursesEndPoint + '/' + courseId + '/sections', {
     method: 'get',
@@ -43,6 +21,7 @@ export const getSections = (courseId, setState) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
   })
     .then(processResponse)
@@ -54,13 +33,17 @@ export const getSections = (courseId, setState) => {
           loading: false,
           sections: data.data,
         });
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.log('[ERROR] ' + error.message));
 };
 
-export const getSection = (courseId, sectionId, setState) => {
+export const getSection = async (courseId, sectionId, setState, navigation) => {
   setState({loading: true});
+
+  let user = await getUserToken();
 
   fetch(coursesEndPoint + '/' + courseId + '/sections/' + sectionId, {
     method: 'get',
@@ -68,6 +51,7 @@ export const getSection = (courseId, sectionId, setState) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
   })
     .then(processResponse)
@@ -79,13 +63,17 @@ export const getSection = (courseId, sectionId, setState) => {
           loading: false,
           section: data.data,
         });
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.log('[ERROR] ' + error.message));
 };
 
-export const getCourse = (id, setState) => {
+export const getCourse = async (id, setState, navigation) => {
   setState({loading: true});
+
+  let user = await getUserToken();
 
   fetch(coursesEndPoint + '/' + id, {
     method: 'get',
@@ -93,6 +81,7 @@ export const getCourse = (id, setState) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
   })
     .then(processResponse)
@@ -104,15 +93,17 @@ export const getCourse = (id, setState) => {
           loading: false,
           course: data.data,
         });
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.log('[ERROR] ' + error.message));
 };
 
-export const getMyCourses = (setState, userId) => {
+export const getMyCourses = async (setState, userId, navigation) => {
   setState({loading: true});
 
-  let token = getUserToken();
+  let user = await getUserToken();
 
   console.log('userId ' + userId);
 
@@ -122,6 +113,7 @@ export const getMyCourses = (setState, userId) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
   })
     .then(processResponse)
@@ -135,13 +127,17 @@ export const getMyCourses = (setState, userId) => {
           loading: false,
           courses: data.data,
         });
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.log('[ERROR] ' + error.message));
 };
 
-export const getCategories = (setCategories, setLoading) => {
+export const getCategories = async (setCategories, setLoading, navigation) => {
   setLoading(true);
+
+  let user = await getUserToken();
 
   fetch(coursesEndPoint + '/categories', {
     method: 'get',
@@ -149,6 +145,7 @@ export const getCategories = (setCategories, setLoading) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
   })
     .then(processResponse)
@@ -169,12 +166,20 @@ export const getCategories = (setCategories, setLoading) => {
       if (statusCode === 200) {
         setLoading(false);
         setCategories(list);
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.log('[ERROR] ' + error.message));
 };
 
-export const creatCourse = (course, category, setError, navigation, userId) => {
+export const creatCourse = async (
+  course,
+  category,
+  setError,
+  navigation,
+  userId,
+) => {
   let form = {...course, categoryId: category};
   console.log('[INFO] form: ' + JSON.stringify(form));
 
@@ -199,12 +204,15 @@ export const creatCourse = (course, category, setError, navigation, userId) => {
   }
   setError({description: false});
 
+  let user = await getUserToken();
+
   fetch(coursesEndPoint, {
     method: 'post',
     mode: 'no-cors',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
     body: JSON.stringify(form),
   })
@@ -215,6 +223,8 @@ export const creatCourse = (course, category, setError, navigation, userId) => {
       if (statusCode === 200) {
         showToast('Course created successfully');
         navigation.navigate('My Courses', {userId: userId});
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       } else {
         showToast(data.message);
       }
@@ -222,10 +232,12 @@ export const creatCourse = (course, category, setError, navigation, userId) => {
     .catch(error => console.log('[ERROR] ' + error.message));
 };
 
-export const getEnrolled = (id, setState) => {
+export const getEnrolled = async (id, setState, navigation) => {
   setState({loading: true});
 
   let url = coursesEndPoint + '/' + id + '/inscriptions';
+
+  let user = await getUserToken();
 
   fetch(url, {
     method: 'get',
@@ -233,25 +245,28 @@ export const getEnrolled = (id, setState) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
   })
     .then(processResponse)
     .then(res => {
       const {statusCode, data} = res;
 
-      console.log('[INFO] ' + data.data);
+      console.log(data);
 
       if (statusCode === 200) {
         setState({
           loading: false,
           enrolled: data.data,
         });
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.error(error.message));
 };
 
-export const creatSection = (form, setError, navigation, courseId) => {
+export const creatSection = async (form, setError, navigation, courseId) => {
   console.log('[INFO] form: ' + JSON.stringify(form));
 
   if (form.subtitle === '') {
@@ -271,12 +286,15 @@ export const creatSection = (form, setError, navigation, courseId) => {
 
   console.log(coursesEndPoint + '/' + courseId + '/sections');
 
+  let user = await getUserToken();
+
   fetch(coursesEndPoint + '/' + courseId + '/sections', {
     method: 'post',
     mode: 'no-cors',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
     body: JSON.stringify(form),
   })
@@ -287,6 +305,8 @@ export const creatSection = (form, setError, navigation, courseId) => {
       if (statusCode === 200) {
         showToast(data.data);
         navigation.navigate('Edit Sections', {courseId: courseId});
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       } else {
         showToast(data.message);
       }
@@ -294,8 +314,15 @@ export const creatSection = (form, setError, navigation, courseId) => {
     .catch(error => console.log('[ERROR] ' + error.message));
 };
 
-export const userIsEnrolled = (id, userId, setEnrolledState) => {
+export const userIsEnrolled = async (
+  id,
+  userId,
+  setEnrolledState,
+  navigation,
+) => {
   setEnrolledState({loading: true});
+
+  let user = await getUserToken();
 
   fetch(usersEndPoint + '/' + userId + '/inscriptions', {
     method: 'get',
@@ -303,6 +330,7 @@ export const userIsEnrolled = (id, userId, setEnrolledState) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
   })
     .then(processResponse)
@@ -319,13 +347,17 @@ export const userIsEnrolled = (id, userId, setEnrolledState) => {
           }
         }
         setEnrolledState({loading: false, isEnrolled: false});
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.log('[ERROR] ' + error.message));
 };
 
-export const enroll = (userId, id, setEnrolledState) => {
+export const enroll = async (userId, id, setEnrolledState, navigation) => {
   let url = coursesEndPoint + '/' + id + '/inscriptions/' + userId;
+
+  let user = await getUserToken();
 
   fetch(url, {
     method: 'post',
@@ -333,6 +365,7 @@ export const enroll = (userId, id, setEnrolledState) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
   })
     .then(processResponse)
@@ -345,6 +378,8 @@ export const enroll = (userId, id, setEnrolledState) => {
           loading: false,
           isEnrolled: true,
         });
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       } else {
         showToast(data.message);
       }
@@ -352,7 +387,14 @@ export const enroll = (userId, id, setEnrolledState) => {
     .catch(error => console.error(error.message));
 };
 
-export const cancelInscription = (userId, id, setEnrolledState) => {
+export const cancelInscription = async (
+  userId,
+  id,
+  setEnrolledState,
+  navigation,
+) => {
+  let user = await getUserToken();
+
   let url = coursesEndPoint + '/' + id + '/inscriptions/' + userId;
 
   fetch(url, {
@@ -361,6 +403,7 @@ export const cancelInscription = (userId, id, setEnrolledState) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
   })
     .then(processResponse)
@@ -373,6 +416,8 @@ export const cancelInscription = (userId, id, setEnrolledState) => {
           loading: false,
           isEnrolled: false,
         });
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       } else {
         showToast(data.message);
       }
@@ -380,11 +425,18 @@ export const cancelInscription = (userId, id, setEnrolledState) => {
     .catch(error => console.error(error.message));
 };
 
-export const getResources = (courseId, sectionId, setState) => {
+export const getResources = async (
+  courseId,
+  sectionId,
+  setState,
+  navigation,
+) => {
   setState({loading: true});
 
   let url =
     coursesEndPoint + '/' + courseId + '/sections/' + sectionId + '/resources';
+
+  let user = await getUserToken();
 
   fetch(url, {
     method: 'get',
@@ -392,6 +444,7 @@ export const getResources = (courseId, sectionId, setState) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
   })
     .then(processResponse)
@@ -399,6 +452,10 @@ export const getResources = (courseId, sectionId, setState) => {
       const {statusCode, data} = res;
 
       console.log(data.data);
+
+      if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
+      }
 
       setState({
         loading: false,
@@ -408,7 +465,7 @@ export const getResources = (courseId, sectionId, setState) => {
     .catch(error => console.error(error.message));
 };
 
-export const editCourse = (course, category, setError, navigation) => {
+export const editCourse = async (course, category, setError, navigation) => {
   let form = {...course, categoryId: category};
   console.log('[INFO] form: ' + JSON.stringify(form));
 
@@ -433,12 +490,15 @@ export const editCourse = (course, category, setError, navigation) => {
   }
   setError({description: false});
 
+  let user = await getUserToken();
+
   fetch(coursesEndPoint + '/' + form.id, {
     method: 'put',
     mode: 'no-cors',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
     body: JSON.stringify(form),
   })
@@ -447,8 +507,10 @@ export const editCourse = (course, category, setError, navigation) => {
       const {statusCode, data} = res;
 
       if (statusCode === 200) {
-        showToast('Course created successfully');
+        showToast('Course edited successfully');
         navigation.navigate('Editable Course', {id: form.id});
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       } else {
         showToast(data.message);
       }
@@ -474,8 +536,13 @@ export const uploadImage = async (courseId, sectionId, image, navigation) => {
 
   console.log();
 
+  let user = await getUserToken();
+
   var requestOptions = {
     method: 'POST',
+    headers: new Headers({
+      Authorization: 'Bearer ' + user.token,
+    }),
     body: data,
     redirect: 'manual',
   };
@@ -485,14 +552,18 @@ export const uploadImage = async (courseId, sectionId, image, navigation) => {
     .then(result => {
       let res = JSON.parse(result);
 
+      console.log({res});
+
       if (res.status === 'success') {
         navigation.goBack();
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.log('error', error));
 };
 
-export const editSection = (section, setError, navigation) => {
+export const editSection = async (section, setError, navigation) => {
   console.log(section);
 
   if (section.subtitle === '') {
@@ -514,12 +585,15 @@ export const editSection = (section, setError, navigation) => {
   let url =
     coursesEndPoint + '/' + section.courseId + '/sections/' + section.id;
 
+  let user = await getUserToken();
+
   fetch(url, {
     method: 'put',
     mode: 'no-cors',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
     body: JSON.stringify(section),
   })
@@ -533,6 +607,8 @@ export const editSection = (section, setError, navigation) => {
           courseId: section.courseId,
           sectionId: section.id,
         });
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       } else {
         showToast(data.message);
       }
@@ -550,8 +626,13 @@ export const uploadPdf = async (courseId, sectionId, pdf, navigation) => {
 
   data.append('file', pdf);
 
+  let user = await getUserToken();
+
   var requestOptions = {
     method: 'POST',
+    headers: new Headers({
+      Authorization: 'Bearer ' + user.token,
+    }),
     body: data,
     redirect: 'manual',
   };
@@ -563,12 +644,18 @@ export const uploadPdf = async (courseId, sectionId, pdf, navigation) => {
 
       if (res.status === 'success') {
         navigation.goBack();
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.log('error', error));
 };
 
-export const getCoursesSubscriptionType = (type, setState) => {
+export const getCoursesSubscriptionType = async (
+  type,
+  setState,
+  navigation,
+) => {
   setState(prevState => {
     let modifiableState = Object.assign({}, prevState);
     modifiableState.loading = true;
@@ -579,12 +666,15 @@ export const getCoursesSubscriptionType = (type, setState) => {
 
   console.log(url);
 
+  let user = await getUserToken();
+
   fetch(url, {
     method: 'get',
     mode: 'no-cors',
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
   })
     .then(processResponse)
@@ -598,12 +688,14 @@ export const getCoursesSubscriptionType = (type, setState) => {
           subscriptionType: type,
           courses: data.data,
         });
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.error(error.message));
 };
 
-export const getCoursesCategory = (category, setState) => {
+export const getCoursesCategory = async (category, setState, navigation) => {
   setState(prevState => {
     let modifiableState = Object.assign({}, prevState);
     modifiableState.loading = true;
@@ -611,6 +703,8 @@ export const getCoursesCategory = (category, setState) => {
   });
 
   let url = categoriesEndpoint + '/' + category;
+
+  let user = await getUserToken();
 
   console.log(url);
 
@@ -620,6 +714,7 @@ export const getCoursesCategory = (category, setState) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
     },
   })
     .then(processResponse)
@@ -633,6 +728,8 @@ export const getCoursesCategory = (category, setState) => {
           category: category,
           courses: data.data,
         });
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
       }
     })
     .catch(error => console.error(error.message));

@@ -1,37 +1,33 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {List} from 'react-native-paper';
-import {getSections} from '../api/CoursesApi';
+import {getEnrolled} from '../../api/CoursesApi';
 
-const SectionsView = ({route, navigation}) => {
-  const {id, userId} = route.params;
+const Enrolled = ({route, navigation}) => {
+  const {courseId} = route.params;
 
   const [state, setState] = React.useState({
     loading: false,
-    sections: [],
+    enrolled: [],
   });
 
   useEffect(() => {
-    getSections(id, setState);
-  }, [id]);
+    getEnrolled(courseId, setState, navigation);
+  }, [courseId, navigation]);
 
   return (
     <View style={styles.root}>
       <List.Section>
         {state.loading === false
-          ? state.sections.map(item => {
+          ? state.enrolled.map(item => {
               return (
                 <List.Item
                   key={item.id}
-                  title={item.subtitle}
+                  title={item.email}
                   titleStyle={styles.titleStyle}
                   style={styles.listItem}
                   onPress={() =>
-                    navigation.navigate('Section View', {
-                      courseId: item.courseId,
-                      sectionId: item.id,
-                      userId: userId,
-                    })
+                    navigation.navigate('User Screen', {userId: item.id})
                   }
                 />
               );
@@ -58,4 +54,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SectionsView;
+export default Enrolled;

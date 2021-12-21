@@ -47,7 +47,9 @@ export const EditUser = ({route, navigation}) => {
           />
         </View>
         <View style={styles.buttonStyle}>
-          <Button mode="contained" onPress={() => updateUser(user, form)}>
+          <Button
+            mode="contained"
+            onPress={() => updateUser(user, form, navigation)}>
             <Text style={styles.buttonText}>{'Update'}</Text>
           </Button>
         </View>

@@ -9,33 +9,12 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Button} from 'react-native-paper';
-import {
-  cancelInscription,
-  enroll,
-  getCourse,
-  userIsEnrolled,
-} from '../../api/CoursesApi';
+import {getCourse} from '../../api/CoursesApi';
 import {categorys} from '../../Parameters/categorys';
 
-const GoToButton = ({navigation, destiny, text, courseId, userId}) => {
-  return (
-    <Button
-      mode="contained"
-      onPress={() =>
-        navigation.navigate(destiny, {id: courseId, userId: userId})
-      }>
-      <Text style={styles.buttonText}>{text}</Text>
-    </Button>
-  );
-};
+const EditableCourse = ({route, navigation}) => {
+  const {id} = route.params;
 
-const CourseView = ({route, navigation}) => {
-  const {id, userId} = route.params;
-
-  const [enrolledState, setEnrolledState] = useState({
-    loading: true,
-    isEnrolled: false,
-  });
   const [state, setState] = useState({
     loading: false,
     course: {
@@ -46,41 +25,8 @@ const CourseView = ({route, navigation}) => {
   });
 
   useEffect(() => {
-    getCourse(id, setState);
-    userIsEnrolled(id, userId, setEnrolledState);
-  }, [id, userId]);
-
-  const EnrollButton = () => {
-    if (!enrolledState.isEnrolled) {
-      return (
-        <Button
-          mode="contained"
-          onPress={() => enroll(userId, id, setEnrolledState)}>
-          <Text style={styles.buttonText}>{'Enroll'}</Text>
-        </Button>
-      );
-    }
-    return (
-      <View style={styles.padding}>
-        <View style={styles.padding}>
-          <GoToButton
-            navigation={navigation}
-            text={'Sections'}
-            destiny={'Sections View'}
-            courseId={id}
-            userId={userId}
-          />
-        </View>
-        <View style={styles.padding}>
-          <Button
-            mode="contained"
-            onPress={() => cancelInscription(userId, id, setEnrolledState)}>
-            <Text style={styles.buttonText}>{'Cancel'}</Text>
-          </Button>
-        </View>
-      </View>
-    );
-  };
+    getCourse(id, setState, navigation);
+  }, [id, navigation]);
 
   const renderInfo = () => {
     if (!state.loading) {
@@ -96,7 +42,21 @@ const CourseView = ({route, navigation}) => {
             </Text>
           </View>
           <View style={styles.options}>
-            {!enrolledState.loading ? <EnrollButton /> : null}
+            <View style={styles.padding}>
+              <GoToButton text={'View enrolled'} destiny={'Enrolled'} />
+            </View>
+            <View style={styles.padding}>
+              <Button
+                mode="contained"
+                onPress={() =>
+                  navigation.navigate('Edit course', {courseInfo: state.course})
+                }>
+                <Text style={styles.buttonText}>{'Edit course info'}</Text>
+              </Button>
+            </View>
+            <View style={styles.padding}>
+              <GoToButton text={'View sections'} destiny={'Edit Sections'} />
+            </View>
           </View>
         </View>
       );
@@ -104,7 +64,17 @@ const CourseView = ({route, navigation}) => {
     return null;
   };
 
-  return renderInfo(state);
+  const GoToButton = ({destiny, text}) => {
+    return (
+      <Button
+        mode="contained"
+        onPress={() => navigation.navigate(destiny, {courseId: id})}>
+        <Text style={styles.buttonText}>{text}</Text>
+      </Button>
+    );
+  };
+
+  return renderInfo();
 };
 
 const styles = StyleSheet.create({
@@ -113,6 +83,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1d3557',
   },
   header: {
+    top: '15%',
     flex: 1,
     alignItems: 'center',
   },
@@ -146,4 +117,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CourseView;
+export default EditableCourse;
