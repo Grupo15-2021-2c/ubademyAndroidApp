@@ -33,12 +33,12 @@ export const Mycollaborations = ({route, navigation}) => {
           ? state.courses.map(item => {
               return (
                 <List.Item
-                  key={item.courseId}
-                  title={item.courseId}
+                  key={item.course.id}
+                  title={item.course.title}
                   titleStyle={styles.titleStyle}
                   style={styles.listItem}
                   onPress={() =>
-                    navigation.navigate('Editable Course', {id: item.courseId})
+                    navigation.navigate('Editable Course', {id: item.course.id})
                   }
                 />
               );

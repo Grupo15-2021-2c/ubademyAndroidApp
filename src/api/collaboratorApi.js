@@ -109,7 +109,7 @@ export const getMyCollaborations = async (setState, userId, navigation) => {
     .then(res => {
       const {statusCode, data} = res;
 
-      console.log(data);
+      console.log(data.data);
 
       if (statusCode === 200) {
         setState({
