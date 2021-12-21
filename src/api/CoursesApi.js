@@ -184,7 +184,7 @@ export const creatCourse = async (
   let form = {
     ...course,
     categoryId: category,
-    subscriptionsId: subscriptionsType,
+    subscriptionId: subscriptionsType,
   };
   console.log('[INFO] form: ' + JSON.stringify(form));
 

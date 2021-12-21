@@ -15,8 +15,8 @@ const CourseCreation = ({route, navigation}) => {
   const [showDropDown2, setShowDropDown2] = useState(false);
   const [categorys, setCategorys] = useState([]);
   const [subscriptionsType, setSubscriptionsType] = useState([
-    {label: 'free', value: 0},
-    {label: 'premium', value: 1},
+    {label: 'free', value: 1},
+    {label: 'premium', value: 2},
   ]);
   const [category, setCategory] = useState(0);
   const [subscriptionType, setSubscriptionType] = useState(0);
