@@ -10,8 +10,7 @@ export const isCollaborator = async (
   setState,
   navigation,
 ) => {
-  let url =
-    coursesEndPoint + '/' + courseId + '/collaborations?userId=' + userId;
+  let url = coursesEndPoint + '/collaborations/by-user?userId=' + userId;
 
   let user = await getUserToken();
 
@@ -31,21 +30,26 @@ export const isCollaborator = async (
       console.log(data);
 
       if (statusCode === 200) {
-        if (data.data.length > 0) {
-          setState(prevState => {
-            let modifiableState = Object.assign({}, prevState);
-            modifiableState.loading = false;
-            modifiableState.isCollaborator = true;
-            return modifiableState;
-          });
-        } else {
-          setState(prevState => {
-            let modifiableState = Object.assign({}, prevState);
-            modifiableState.loading = false;
-            modifiableState.isCollaborator = false;
-            return modifiableState;
-          });
+        console.log('courseId' + courseId);
+        for (let course in data.data) {
+          if (data.data[course].course.id === courseId) {
+            setState(prevState => {
+              let modifiableState = Object.assign({}, prevState);
+              modifiableState.loading = false;
+              modifiableState.isCollaborator = true;
+              modifiableState.info = data.data[course];
+              return modifiableState;
+            });
+            return;
+          }
         }
+
+        setState(prevState => {
+          let modifiableState = Object.assign({}, prevState);
+          modifiableState.loading = false;
+          modifiableState.isCollaborator = false;
+          return modifiableState;
+        });
       } else if (data.message === 'JwtParseError: Jwt is expired') {
         logOutUser(navigation);
       }
@@ -121,4 +125,41 @@ export const getMyCollaborations = async (setState, userId, navigation) => {
       }
     })
     .catch(error => console.log('[ERROR] ' + error.message));
+};
+
+export const removeCollaborator = async (
+  userId,
+  courseId,
+  navigation,
+  state,
+) => {
+  let url =
+    coursesEndPoint + '/' + courseId + '/collaborations/' + state.info.id;
+
+  console.debug(url);
+
+  let user = await getUserToken();
+
+  fetch(url, {
+    method: 'delete',
+    mode: 'no-cors',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + user.token,
+    },
+  })
+    .then(processResponse)
+    .then(res => {
+      const {statusCode, data} = res;
+
+      console.log(data);
+
+      if (statusCode === 200) {
+        navigation.goBack();
+      } else if (data.message === 'JwtParseError: Jwt is expired') {
+        logOutUser(navigation);
+      }
+    })
+    .catch(error => console.error(error.message));
 };

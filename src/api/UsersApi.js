@@ -1,4 +1,4 @@
-import {usersEndPoint} from '../Parameters/EndpointsUrls';
+import {paymentsUsers, usersEndPoint} from '../Parameters/EndpointsUrls';
 import processResponse from '../components/FetchUtilities';
 import showToast from '../components/ToastUtilities';
 import {validateEmail} from '../Parameters/Regex';
@@ -87,4 +87,194 @@ export const logOutUser = async navigation => {
     .then(() => console.log('@ubademy:currentUserToken stored'));
 
   navigation.navigate('Sign In');
+};
+
+export const getUserSubscriptionType = (setUser, userId) => {
+  let url = paymentsUsers + '/' + userId + '/deposit';
+  console.debug(url);
+
+  fetch(url, {
+    method: 'get',
+    mode: 'no-cors',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(processResponse)
+    .then(res => {
+      const {statusCode, data} = res;
+
+      console.debug('getUserSubscriptionType');
+      console.debug('statusCode: ' + statusCode);
+      console.debug(data);
+
+      if (statusCode === 200) {
+        setUser(prevState => {
+          let modifiableState = Object.assign({}, prevState);
+          modifiableState.loading = false;
+          modifiableState.subscriptionId = 2;
+          return modifiableState;
+        });
+      } else {
+        setUser(prevState => {
+          let modifiableState = Object.assign({}, prevState);
+          modifiableState.loading = false;
+          modifiableState.subscriptionId = 1;
+          return modifiableState;
+        });
+      }
+    })
+    .catch(error => console.error(error.message));
+};
+
+export const getUserWallet = (userId, setState) => {
+  let url = paymentsUsers + '/' + userId + '/wallet';
+  console.debug(url);
+
+  fetch(url, {
+    method: 'get',
+    mode: 'no-cors',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(processResponse)
+    .then(res => {
+      const {statusCode, data} = res;
+
+      console.debug('statusCode: ' + statusCode);
+      console.debug(data);
+
+      if (statusCode === 200) {
+        setState(prevState => {
+          let modifiableState = Object.assign({}, prevState);
+          modifiableState.loading = false;
+          modifiableState.wallet = data.data.address;
+          return modifiableState;
+        });
+      } else if (statusCode === 404) {
+        setState(prevState => {
+          let modifiableState = Object.assign({}, prevState);
+          modifiableState.loading = false;
+          return modifiableState;
+        });
+      }
+    })
+    .catch(error => console.error(error.message));
+};
+
+export const createWallet = (userId, setState) => {
+  let url = paymentsUsers + '/' + userId + '/wallet';
+  console.debug(url);
+
+  fetch(url, {
+    method: 'post',
+    mode: 'no-cors',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({}),
+  })
+    .then(processResponse)
+    .then(res => {
+      const {statusCode, data} = res;
+
+      console.debug('statusCode: ' + statusCode);
+      console.debug(data);
+
+      if (statusCode === 200) {
+        setState(prevState => {
+          let modifiableState = Object.assign({}, prevState);
+          modifiableState.wallet = data.data.address;
+          return modifiableState;
+        });
+      } else if (statusCode === 404) {
+        setState(prevState => {
+          let modifiableState = Object.assign({}, prevState);
+          modifiableState.loading = false;
+          modifiableState.wallet = null;
+          return modifiableState;
+        });
+      }
+    })
+    .catch(error => console.error(error.message));
+};
+
+export const isPremium = (userId, setState) => {
+  let url = paymentsUsers + '/' + userId + '/deposit';
+  console.debug(url);
+
+  fetch(url, {
+    method: 'get',
+    mode: 'no-cors',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  })
+    .then(processResponse)
+    .then(res => {
+      const {statusCode, data} = res;
+
+      console.debug('statusCode: ' + statusCode);
+      console.debug(data);
+
+      if (statusCode === 200) {
+        setState(prevState => {
+          let modifiableState = Object.assign({}, prevState);
+          modifiableState.loadingPremium = false;
+          modifiableState.premium = true;
+          return modifiableState;
+        });
+      } else {
+        setState(prevState => {
+          let modifiableState = Object.assign({}, prevState);
+          modifiableState.loadingPremium = false;
+          modifiableState.premium = false;
+          return modifiableState;
+        });
+      }
+    })
+    .catch(error => console.error(error.message));
+};
+
+export const payPremium = (userId, setState) => {
+  setState(prevState => {
+    let modifiableState = Object.assign({}, prevState);
+    modifiableState.loadingPremium = true;
+    return modifiableState;
+  });
+
+  let url = paymentsUsers + '/' + userId + '/deposit';
+  console.debug(url);
+
+  fetch(url, {
+    method: 'post',
+    mode: 'no-cors',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({amountInEthers: '0.001'}),
+  })
+    .then(processResponse)
+    .then(res => {
+      const {statusCode, data} = res;
+
+      console.debug('statusCode: ' + statusCode);
+      console.debug(data);
+
+      if (statusCode === 200) {
+        setState(prevState => {
+          let modifiableState = Object.assign({}, prevState);
+          modifiableState.loadingPremium = false;
+          modifiableState.premium = true;
+          return modifiableState;
+        });
+      }
+    })
+    .catch(error => console.error(error.message));
 };

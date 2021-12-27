@@ -54,6 +54,7 @@ import {Icon} from 'react-native-elements';
 import {AppointCollaborators} from './screens/course/appointCollaborators';
 import {AddCollaborator} from './screens/course/addCollaborator';
 import {Mycollaborations} from './screens/course/myCollaborations';
+import {PaymentsInfo} from './screens/user/paymentsInfo';
 
 const Stack = createStackNavigator();
 
@@ -658,6 +659,40 @@ const App: () => Node = () => {
         <Stack.Screen
           name="Section View"
           component={SectionView}
+          options={({navigation}) => ({
+            title: '',
+            headerStyle: {backgroundColor: '#A8DAFA'},
+            headerLeft: () => (
+              <Icon
+                name={'home'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('Home', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+            headerRight: () => (
+              <Icon
+                name={'account-circle'}
+                color={'#1d3557'}
+                size={38}
+                onPress={async () => {
+                  let user = await loadedUserId();
+                  navigation.navigate('User Screen', {
+                    userId: user.currentUserId,
+                  });
+                }}
+              />
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="PaymentsInfo"
+          component={PaymentsInfo}
           options={({navigation}) => ({
             title: '',
             headerStyle: {backgroundColor: '#A8DAFA'},
