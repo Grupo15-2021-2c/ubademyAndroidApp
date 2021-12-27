@@ -7,6 +7,7 @@
     1. [Navigation bar](#Navigationbar)
     2. [Home screen](#Home screen)
     3. [Users screen](#Userscreen)
+    4. [Edit User Screen](#EditUserScreen)
 
 # <a name="GettingStarted">Getting Started</a>
 
@@ -16,6 +17,10 @@ This is the first page that you will see if this is your first time using the ap
 can create one by going to de Sing Up screen by pressing the Sign Up button at the bottom of the screen.
 
 If you already have an account you can Sign In by putting your email and password or by using Google.
+
+<p align="center">
+   <img src="res/signInScreen.jpeg" alt="drawing" style="width: 250px"/>
+</p>
 
 ## <a name="SignUp">Sign Up</a>
 
@@ -59,3 +64,33 @@ edit your payment info to become a premium user, or just Log out of the app.
 <p align="center">
 <img src="res/userScreen.jpeg" alt="drawing" style="width: 250px"/>
 </p>
+
+## <a name="EditUserScreen">Edit user screen</a>
+
+Here you can change your info, just type the new information and press UPDATE.
+
+<p align="center">
+<img src="res/EditUserScreen.jpeg" alt="drawing" style="width: 250px"/>
+</p>
+
+# Courses
+
+## My Courses
+
+Here you will have a list of all the courses that you created you can access any of your courses by touching any of them
+or create a new course by pressing the **ADD COURSE** button.
+
+<p align="center">
+<img src="res/MyCoursesScreen.jpeg" alt="drawing" style="width: 250px"/>
+</p>
+
+## Create Course
+
+To create a course you need to add a **Title**, chose between one of the available **categories**, then chose the
+**Subscription Type** if you want your course to be either *free* or *premium*. Finally, add a **description** to your
+course so users will understand better what your course is about.
+
+<p align="center">
+<img src="res/CreatCourseScreen.jpeg" alt="drawing" style="width: 250px"/>
+</p>
+
