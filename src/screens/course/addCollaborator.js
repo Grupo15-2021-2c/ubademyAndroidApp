@@ -6,7 +6,6 @@ import {
   removeCollaborator,
 } from '../../api/collaboratorApi';
 import {Button} from 'react-native-paper';
-import {logOutUser} from '../../api/UsersApi';
 
 export const AddCollaborator = ({route, navigation}) => {
   const {userId, courseId, user} = route.params;

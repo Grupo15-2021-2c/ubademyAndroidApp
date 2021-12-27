@@ -1,7 +1,6 @@
-import {coursesEndPoint, creatorsEndPoint} from '../Parameters/EndpointsUrls';
+import {coursesEndPoint} from '../Parameters/EndpointsUrls';
 import {getUserToken} from './Storage';
 import processResponse from '../components/FetchUtilities';
-import showToast from '../components/ToastUtilities';
 import {logOutUser} from './UsersApi';
 
 export const isCollaborator = async (
