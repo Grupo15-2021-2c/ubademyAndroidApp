@@ -1,7 +1,3 @@
----
-layout: default title: Ubademy User Guide
----
-
 # Index
 
 1. [Getting Started](#Getting Started)
