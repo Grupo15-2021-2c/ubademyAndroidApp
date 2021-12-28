@@ -188,7 +188,7 @@ export const createWallet = (userId, setState) => {
       if (statusCode === 200) {
         setState(prevState => {
           let modifiableState = Object.assign({}, prevState);
-          modifiableState.wallet = data.data.address;
+          modifiableState.wallet = data.address;
           return modifiableState;
         });
       } else if (statusCode === 404) {

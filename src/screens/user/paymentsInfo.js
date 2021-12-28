@@ -49,7 +49,7 @@ export const PaymentsInfo = ({route, navigation}) => {
             </View>
             <View style={styles.padding}>
               <Text style={styles.nameTextStyle}>
-                {'You can become premium for only 0.001 HET'}
+                {'You can become premium for only 0.001 ETH'}
               </Text>
             </View>
           </View>
@@ -60,6 +60,7 @@ export const PaymentsInfo = ({route, navigation}) => {
   };
 
   const ShowPaymentInfo = () => {
+    console.log(state);
     if (state.wallet !== null) {
       return (
         <View style={styles.root}>

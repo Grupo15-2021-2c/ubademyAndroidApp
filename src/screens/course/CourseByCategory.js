@@ -28,7 +28,7 @@ export const CourseByCategory = ({route, navigation}) => {
           <DropDown
             dropDownItemSelectedStyle={styles.blueBackground}
             dropDownItemStyle={styles.blueBackground}
-            label={'Subscription'}
+            label={'Category'}
             mode={'flat'}
             visible={showDropDown}
             onDismiss={() => setShowDropDown(false)}

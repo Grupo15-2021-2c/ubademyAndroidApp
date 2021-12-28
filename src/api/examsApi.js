@@ -50,6 +50,20 @@ export const createExam = async (courseId, sectionId, state, navigation) => {
   let uri =
     coursesEndPoint + '/' + courseId + '/sections/' + sectionId + '/' + 'exams';
 
+  if (state.title === '') {
+    showToast('The exam needs a title');
+    return;
+  }
+
+  for (let i in state.questions) {
+    console.log('i ' + i);
+    console.log('state.questions[i] ' + state.questions[i].text);
+    if (state.questions[i].text === '') {
+      showToast('Question ' + i + ' is empty');
+      return;
+    }
+  }
+
   console.log(uri);
 
   console.log({state});

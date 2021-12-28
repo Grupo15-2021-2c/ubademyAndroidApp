@@ -45,13 +45,6 @@ export const Mycollaborations = ({route, navigation}) => {
             })
           : null}
       </List.Section>
-      <View style={styles.addButton}>
-        <GoToButton
-          navigation={navigation}
-          text={'Add Course'}
-          destiny={'Creat Course'}
-        />
-      </View>
     </ScrollView>
   );
 };

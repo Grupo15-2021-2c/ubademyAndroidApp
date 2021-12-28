@@ -68,7 +68,7 @@ const CourseView = ({route, navigation}) => {
           return (
             <Text style={styles.notPremium}>
               {
-                'This is a premium course, you fill need to upgrade your account to enrolls'
+                'This is a premium course, you will need to upgrade your account to enroll'
               }
             </Text>
           );
@@ -86,6 +86,13 @@ const CourseView = ({route, navigation}) => {
     }
     return (
       <View style={styles.padding}>
+        <View style={styles.padding}>
+          <Button
+            mode="contained"
+            onPress={() => navigation.navigate('Enrolled', {courseId: id})}>
+            <Text style={styles.buttonText}>{'View enrolled'}</Text>
+          </Button>
+        </View>
         <View style={styles.padding}>
           <GoToButton
             navigation={navigation}
