@@ -1,5 +1,9 @@
 # Ubademy android app
 
+# APP USER GUIDE
+
+The user guide for the app is available at https://grupo15-2021-2c.github.io/ubademyAndroidApp/
+
 ## SETUP
 1. Clone repo
 2. Run `npm i` on root folder
