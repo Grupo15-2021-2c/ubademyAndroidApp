@@ -12,3 +12,8 @@ The user guide for the app is available at https://grupo15-2021-2c.github.io/uba
 ## RUNNING LOCALLY
 1. run `npx react-native start` in a terminal
 2. run `npx react-native run-android` in another terminal
+
+## BUILD APK
+
+1. go to the andtoid directory `cd android`
+2. run `./gradlew assembleRelease`
