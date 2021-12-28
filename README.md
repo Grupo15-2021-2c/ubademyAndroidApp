@@ -1,6 +1,6 @@
 # Ubademy android app
 
-# APP USER GUIDE
+## APP USER GUIDE
 
 The user guide for the app is available at https://grupo15-2021-2c.github.io/ubademyAndroidApp/
 
