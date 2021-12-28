@@ -33,7 +33,7 @@ export const AddPdf = ({route, navigation}) => {
           <Button
             mode="contained"
             onPress={() => uploadPdf(courseId, sectionId, uri, navigation)}>
-            <Text style={styles.buttonText}>{'Add Image'}</Text>
+            <Text style={styles.buttonText}>{'Add pdf'}</Text>
           </Button>
         </View>
       </View>

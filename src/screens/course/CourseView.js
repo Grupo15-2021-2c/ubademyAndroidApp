@@ -16,6 +16,9 @@ import {
   userIsEnrolled,
 } from '../../api/CoursesApi';
 import {categorys} from '../../Parameters/categorys';
+import {getUserSubscriptionType} from '../../api/UsersApi';
+
+const premiumId = 2;
 
 const GoToButton = ({navigation, destiny, text, courseId, userId}) => {
   return (
@@ -44,24 +47,52 @@ const CourseView = ({route, navigation}) => {
       description: 'loading description',
     },
   });
+  const [user, setUser] = useState({
+    loading: true,
+    subscriptionId: 0,
+  });
 
   useEffect(() => {
+    getUserSubscriptionType(setUser, userId);
     getCourse(id, setState, navigation);
     userIsEnrolled(id, userId, setEnrolledState);
   }, [id, navigation, userId]);
 
   const EnrollButton = () => {
     if (!enrolledState.isEnrolled) {
-      return (
-        <Button
-          mode="contained"
-          onPress={() => enroll(userId, id, setEnrolledState, navigation)}>
-          <Text style={styles.buttonText}>{'Enroll'}</Text>
-        </Button>
-      );
+      if (!user.loading) {
+        if (
+          state.course.subscriptionId === premiumId &&
+          user.subscriptionId !== premiumId
+        ) {
+          return (
+            <Text style={styles.notPremium}>
+              {
+                'This is a premium course, you will need to upgrade your account to enroll'
+              }
+            </Text>
+          );
+        }
+        return (
+          <Button
+            mode="contained"
+            onPress={() => enroll(userId, id, setEnrolledState, navigation)}>
+            <Text style={styles.buttonText}>{'Enroll'}</Text>
+          </Button>
+        );
+      } else {
+        return null;
+      }
     }
     return (
       <View style={styles.padding}>
+        <View style={styles.padding}>
+          <Button
+            mode="contained"
+            onPress={() => navigation.navigate('Enrolled', {courseId: id})}>
+            <Text style={styles.buttonText}>{'View enrolled'}</Text>
+          </Button>
+        </View>
         <View style={styles.padding}>
           <GoToButton
             navigation={navigation}
@@ -143,6 +174,11 @@ const styles = StyleSheet.create({
     flex: 2,
     margin: '2%',
     justifyContent: 'center',
+  },
+  notPremium: {
+    fontSize: 18,
+    color: '#A8DAFA',
+    textAlign: 'center',
   },
 });
 

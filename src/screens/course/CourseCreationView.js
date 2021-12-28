@@ -68,7 +68,7 @@ const CourseCreation = ({route, navigation}) => {
               <DropDown
                 dropDownItemSelectedStyle={styles.blueBackground}
                 dropDownItemStyle={styles.blueBackground}
-                label={'SubscriptionType'}
+                label={'Subscription Type'}
                 mode={'flat'}
                 visible={showDropDown2}
                 onDismiss={() => setShowDropDown2(false)}

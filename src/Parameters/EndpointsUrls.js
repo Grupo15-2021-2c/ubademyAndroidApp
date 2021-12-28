@@ -1,5 +1,7 @@
-const url = 'https://ubademy-g15-back-node-stage.herokuapp.com/api';
-const python = 'https://taller-ii-g15-ubademy-pychat.herokuapp.com';
+const url = 'https://ubademy-ts-lorenzolgz.cloud.okteto.net/api';
+const python = 'https://ubademy-chat-lorenzolgz.cloud.okteto.net';
+const payments = 'https://payments-lorenzolgz.cloud.okteto.net';
+export const paymentsUsers = payments + '/users';
 export const chatEndpoint = python + '/chat';
 export const deviceTokenEndpoint = python + '/users';
 const loginEndPoint = url + '/users/login';

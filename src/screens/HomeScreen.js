@@ -17,7 +17,7 @@ const UbademyLogo = () => {
         style={styles.logoStyle}
         source={require('../resources/images/adaptive-icon.png')}
       />
-      <Text style={styles.titleText}>{'Welcome back again to Ubademy!'}</Text>
+      <Text style={styles.titleText}>{'Welcome back to Ubademy!'}</Text>
     </View>
   );
 };

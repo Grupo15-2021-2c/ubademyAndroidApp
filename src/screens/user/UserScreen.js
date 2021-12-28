@@ -48,6 +48,15 @@ const UserScreen = ({route, navigation}) => {
           <View style={styles.padding}>
             <Button
               mode="contained"
+              onPress={() =>
+                navigation.navigate('PaymentsInfo', {userId: userId})
+              }>
+              <Text style={styles.buttonText}>{'Edit Payment info'}</Text>
+            </Button>
+          </View>
+          <View style={styles.padding}>
+            <Button
+              mode="contained"
               onPress={async () => {
                 await AsyncStorage.setItem('@ubademy:currentUserId', '')
                   .then()

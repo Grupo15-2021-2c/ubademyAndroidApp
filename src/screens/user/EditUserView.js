@@ -40,7 +40,7 @@ export const EditUser = ({route, navigation}) => {
         <View style={styles.margin}>
           <TextInput
             style={styles.iconStyle}
-            label={'Subtitle'}
+            label={'Email'}
             value={form.email}
             theme={textInputTheme}
             onChangeText={textInput => setForm({...form, email: textInput})}

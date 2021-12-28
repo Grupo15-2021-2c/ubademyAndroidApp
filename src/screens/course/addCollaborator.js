@@ -1,8 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {isCollaborator, makeCollaborator} from '../../api/collaboratorApi';
+import {
+  isCollaborator,
+  makeCollaborator,
+  removeCollaborator,
+} from '../../api/collaboratorApi';
 import {Button} from 'react-native-paper';
-import {logOutUser} from '../../api/UsersApi';
 
 export const AddCollaborator = ({route, navigation}) => {
   const {userId, courseId, user} = route.params;
@@ -39,9 +42,13 @@ export const AddCollaborator = ({route, navigation}) => {
             </View>
           ) : (
             <View style={styles.editButton}>
-              <Text style={styles.text}>
-                {'User already is a collaborator'}
-              </Text>
+              <Button
+                mode="contained"
+                onPress={() =>
+                  removeCollaborator(userId, courseId, navigation, state)
+                }>
+                <Text style={styles.buttonText}>{'Remove collaborator'}</Text>
+              </Button>
             </View>
           )}
         </View>
